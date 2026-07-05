@@ -53,11 +53,14 @@ public sealed partial class UseDelayInfo
     public TimeSpan StartTime { get; set; }
     [DataField]
     public TimeSpan EndTime { get; set; }
+    [DataField]
+    public bool Hidden { get; set; }
 
-    public UseDelayInfo(TimeSpan length, TimeSpan startTime = default, TimeSpan endTime = default)
+    public UseDelayInfo(TimeSpan length, TimeSpan startTime = default, TimeSpan endTime = default, bool hidden = false)
     {
         Length = length;
         StartTime = startTime;
         EndTime = endTime;
+        Hidden = hidden;
     }
 }

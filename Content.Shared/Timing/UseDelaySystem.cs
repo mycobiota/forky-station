@@ -65,7 +65,7 @@ public sealed partial class UseDelaySystem : EntitySystem
     /// <remarks>
     /// This will add a UseDelay component to the entity if it doesn't have one.
     /// </remarks>
-    public bool SetLength(Entity<UseDelayComponent?> ent, TimeSpan length, string id = DefaultId)
+    public bool SetLength(Entity<UseDelayComponent?> ent, TimeSpan length, string id = DefaultId, bool hidden = false)
     {
         EnsureComp<UseDelayComponent>(ent.Owner, out var comp);
 
@@ -78,7 +78,7 @@ public sealed partial class UseDelaySystem : EntitySystem
         }
         else
         {
-            comp.Delays.Add(id, new UseDelayInfo(length));
+            comp.Delays.Add(id, new UseDelayInfo(length, hidden: hidden));
         }
 
         Dirty(ent);
@@ -139,7 +139,7 @@ public sealed partial class UseDelaySystem : EntitySystem
 
         foreach (var entry in ent.Comp.Delays)
         {
-            if (entry.Value.EndTime > last.EndTime)
+            if (entry.Value.EndTime > last.EndTime && !entry.Value.Hidden) // TODO: find another way to hide Ui indicator per-delay that doesnt touch this function
                 last = entry.Value;
         }
         return last;
