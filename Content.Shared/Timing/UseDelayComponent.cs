@@ -25,6 +25,16 @@ public sealed partial class UseDelayComponent : Component
     /// </remarks>
     [DataField]
     public TimeSpan Delay = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// Whether to hide the hand UI cooldown indicator for all delays.
+    /// </summary>
+    /// <remarks>
+    /// Note that all delays on the component will not have a UI indicator
+    /// if this is set to true.
+    /// </remarks>
+    [DataField]
+    public bool Hidden = false;
 }
 
 [Serializable, NetSerializable]

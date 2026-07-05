@@ -368,7 +368,7 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
         foreach (var hand in handsGui.HandContainer.GetButtons())
         {
 
-            if (!_entities.TryGetComponent(hand.Entity, out UseDelayComponent? useDelay))
+            if (!_entities.TryGetComponent(hand.Entity, out UseDelayComponent? useDelay) || useDelay.Hidden)
             {
                 hand.CooldownDisplay.Visible = false;
                 continue;
