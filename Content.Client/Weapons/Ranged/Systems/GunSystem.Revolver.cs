@@ -28,12 +28,13 @@ public sealed partial class GunSystem
 
     private void OnRevolverAmmoUpdate(Entity<RevolverAmmoProviderComponent> ent, ref UpdateAmmoCounterEvent args)
     {
-        if (args.Control is not RevolverStatusControl control) return;
+        if (args.Control is not RevolverStatusControl control || ent.Comp.HideAmmo) return;
         control.Update(ent.Comp.CurrentIndex, ent.Comp.Chambers);
     }
 
     private void OnRevolverCounter(Entity<RevolverAmmoProviderComponent> ent, ref AmmoCounterControlEvent args)
     {
+        if (ent.Comp.HideAmmo) return;
         args.Control = new RevolverStatusControl();
     }
 }
