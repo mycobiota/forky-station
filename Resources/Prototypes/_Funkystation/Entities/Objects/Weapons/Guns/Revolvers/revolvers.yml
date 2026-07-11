@@ -1,0 +1,12 @@
+- type: entity
+  name: roulette revolver
+  parent: WeaponRevolverInspector
+  id: WeaponRevolverRoulette
+  description: You can't see the contents of the chambers. Loads up to 6 rounds of .45 magnum.
+  suffix: TESTING
+  components:
+  - type: RevolverAmmoProvider
+    hideAmmo: true
+    proto: null
+    chambers: [ null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null ]
