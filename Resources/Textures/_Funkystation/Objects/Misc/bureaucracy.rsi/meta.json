@@ -1,0 +1,26 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "envelope sprites by mycobiota. paper_stamp-generic stamp Taken from tgstation at https://github.com/tgstation/tgstation/commit/e1142f20f5e4661cb6845cfcf2dd69f864d67432",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "envelope_closed_unlabelled"
+        },
+        {
+            "name": "envelope_closed_labelled"
+        },
+        {
+            "name": "envelope_open"
+        },
+        {
+            "name": "envelope_torn"
+        },
+        {
+            "name": "paper_stamp-generic"
+        }
+    ]
+}

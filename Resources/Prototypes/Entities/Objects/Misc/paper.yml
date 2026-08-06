@@ -389,6 +389,7 @@
   name: envelope
   parent: BaseItem
   id: Envelope
+  suffix: deprecated
   description: 'A small envelope for keeping prying eyes off of your sensitive documents.'
   components:
   - type: Sprite
