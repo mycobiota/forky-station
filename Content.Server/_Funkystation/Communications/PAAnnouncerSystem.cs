@@ -45,7 +45,6 @@ public sealed partial class PAAnnouncerSystem : EntitySystem
             return;
 
         var announcers = EntityQueryEnumerator<PAAnnouncerComponent>();
-        // TODO: iterating through them all like this every update makes me very sad.
         while (announcers.MoveNext(out var uid, out var comp))
         {
             if (!comp.Enabled)
