@@ -165,7 +165,7 @@ public abstract partial class SharedChatSystem : EntitySystem
 
         // funky - Unless the source can bypass intercom restrictions, we want the common prefix to act like :h instead.
         if (input.StartsWith(RadioCommonPrefix)
-            && (!_cfg.GetCVar(ChatPrefixCVars.RedirectCommonPrefix) || !HasComp<HeadsetComponent>(source))) // at the moment, only headsets are unable to send messages to common
+            && (!_cfg.GetCVar(ChatPrefixCVars.RedirectCommonPrefix) || !HasComp<WearingHeadsetComponent>(source))) // at the moment, only headsets are unable to send messages to common
         {
             output = SanitizeMessageCapital(input[1..].TrimStart());
             channel = ProtoMan.Index<RadioChannelPrototype>(CommonChannel);
@@ -187,15 +187,15 @@ public abstract partial class SharedChatSystem : EntitySystem
         }
 
         // funky change
-        var channelKey = !input.StartsWith(RadioCommonPrefix)
-            ? input[1]
-            : DefaultChannelKey;
+        var channelKey = input.StartsWith(RadioCommonPrefix)
+            ? DefaultChannelKey
+            : input[1];
         channelKey = char.ToLower(channelKey);
 
         // funky - if the message starts with ; then the message begins one character earlier (no radio prefix)
-        output = SanitizeMessageCapital(!input.StartsWith(RadioCommonPrefix)
-            ? input[2..].TrimStart()
-            : input[1..].TrimStart());
+        output = SanitizeMessageCapital(input.StartsWith(RadioCommonPrefix)
+            ? input[1..].TrimStart()
+            : input[2..].TrimStart());
 
         if (channelKey == DefaultChannelKey)
         {

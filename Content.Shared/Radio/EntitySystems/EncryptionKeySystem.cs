@@ -217,7 +217,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
                 examineEvent.PushMarkup(Loc.GetString("examine-encryption-intercom-only-channel", // yes its hardcoded i didnt wanna mess with the function signature
                     ("color", proto.Color),
                     ("id", proto.LocalizedName),
-                    ("freq", proto.Frequency / 10f)));
+                    ("freq", proto.Frequency)));
                 continue;
             }
             // END Funkystation
