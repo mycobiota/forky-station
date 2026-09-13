@@ -124,7 +124,7 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
 
             if (Math.Abs(targetAlpha - baseAlpha) > 0.01f)
             {
-                if (!comp.Faded)
+                if (!comp.FullyFaded)
                 {
                     if (comp.FadeProgress <= TimeSpan.Zero)
                     {
@@ -135,7 +135,7 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
                         }
                         else
                         {
-                            comp.Faded = true;
+                            comp.FullyFaded = true;
                             comp.Fading = false;
                         }
                     }
@@ -148,7 +148,7 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
             }
             else
             {
-                comp.Faded = false;
+                comp.FullyFaded = false;
                 comp.Fading = false;
                 comp.FadeProgress = TimeSpan.Zero;
             }

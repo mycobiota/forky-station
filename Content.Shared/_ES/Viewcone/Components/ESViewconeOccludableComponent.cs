@@ -49,7 +49,7 @@ public sealed partial class ESViewconeOccludableComponent : Component, IComponen
     public TimeSpan FadeProgress = TimeSpan.Zero;
 
     [DataField, AutoNetworkedField]
-    public bool Faded;
+    public bool FullyFaded = true; // assume occluded by default
 
     [DataField, AutoNetworkedField]
     public bool Fading;
