@@ -34,7 +34,7 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
     // slightly sus but cached from beforedraw to use in draw.
     private Entity<EyeComponent, ESViewconeComponent>? _nextEye;
 
-    private TimeSpan FadeLength = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan FadeLength = TimeSpan.FromSeconds(1);
 
     public ESViewconeSetAlphaOverlay()
     {
