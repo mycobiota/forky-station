@@ -42,6 +42,18 @@ public sealed partial class ESViewconeOccludableComponent : Component, IComponen
     [DataField, AutoNetworkedField]
     public bool RemoveOnPullDropped = false;
 
+    [DataField, AutoNetworkedField]
+    public TimeSpan FadeTime;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan FadeProgress = TimeSpan.Zero;
+
+    [DataField, AutoNetworkedField]
+    public bool Faded;
+
+    [DataField, AutoNetworkedField]
+    public bool Fading;
+
     // Clientside comptree stuff
     public EntityUid? TreeUid { get; set; }
     public DynamicTree<ComponentTreeEntry<ESViewconeOccludableComponent>>? Tree { get; set; }

@@ -8,6 +8,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.Timing;
 
 namespace Content.Client._ES.Viewcone.Overlays;
 
@@ -21,6 +22,7 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
 {
     [Dependency] private IEntityManager _ent = default!;
     [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = null!;
     private readonly ESViewconeOverlayManagementSystem _cone;
     private readonly ESViewconeAngleSystem _angle;
     private readonly ESViewconeOccludableTreeSystem _tree;
@@ -31,6 +33,8 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
 
     // slightly sus but cached from beforedraw to use in draw.
     private Entity<EyeComponent, ESViewconeComponent>? _nextEye;
+
+    private TimeSpan FadeLength = TimeSpan.FromSeconds(5);
 
     public ESViewconeSetAlphaOverlay()
     {
@@ -117,6 +121,37 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
             var angleAlpha = (float) Math.Clamp((Math.Abs(angleDist.Theta) - (radConeAngle * 0.5f)) + (radConeFeather * 0.5f), 0f, radConeFeather) / radConeFeather;
             var distAlpha = Math.Clamp((distLength - cone.ConeIgnoreRadius) + (cone.ConeIgnoreFeather * 0.5f), 0f, cone.ConeIgnoreFeather) / cone.ConeIgnoreFeather;
             var targetAlpha = Math.Max(1f - angleAlpha, 1f - distAlpha);
+
+            if (Math.Abs(targetAlpha - baseAlpha) > 0.01f)
+            {
+                if (!comp.Faded)
+                {
+                    if (comp.FadeProgress <= TimeSpan.Zero)
+                    {
+                        if (!comp.Fading)
+                        {
+                            comp.FadeTime = _timing.RealTime + FadeLength;
+                            comp.Fading = true;
+                        }
+                        else
+                        {
+                            comp.Faded = true;
+                            comp.Fading = false;
+                        }
+                    }
+                    if (comp.Fading)
+                    {
+                        comp.FadeProgress = comp.FadeTime - _timing.RealTime;
+                        targetAlpha = Math.Clamp((float)(comp.FadeProgress / FadeLength) + targetAlpha, 0f, 1f);
+                    }
+                }
+            }
+            else
+            {
+                comp.Faded = false;
+                comp.Fading = false;
+                comp.FadeProgress = TimeSpan.Zero;
+            }
 
             // save the results so we can use it in resetalpha overlay
             _cone.CachedBaseAlphas.Add(((uid, sprite), baseAlpha));
