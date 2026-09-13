@@ -34,7 +34,7 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
     // slightly sus but cached from beforedraw to use in draw.
     private Entity<EyeComponent, ESViewconeComponent>? _nextEye;
 
-    private static readonly TimeSpan FadeLength = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan FadeLength = TimeSpan.FromSeconds(0.2);
 
     public ESViewconeSetAlphaOverlay()
     {
@@ -124,26 +124,23 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
 
             if (Math.Abs(targetAlpha - baseAlpha) > 0.01f)
             {
-                if (!comp.FullyFaded)
+                if (!comp.FullyFaded && comp.FadeProgress <= TimeSpan.Zero)
                 {
-                    if (comp.FadeProgress <= TimeSpan.Zero)
+                    if (!comp.Fading)
                     {
-                        if (!comp.Fading)
-                        {
-                            comp.FadeTime = _timing.RealTime + FadeLength;
-                            comp.Fading = true;
-                        }
-                        else
-                        {
-                            comp.FullyFaded = true;
-                            comp.Fading = false;
-                        }
+                        comp.FadeTime = _timing.RealTime + FadeLength;
+                        comp.Fading = true;
                     }
-                    if (comp.Fading)
+                    else
                     {
-                        comp.FadeProgress = comp.FadeTime - _timing.RealTime;
-                        targetAlpha = Math.Clamp((float)(comp.FadeProgress / FadeLength) + targetAlpha, 0f, 1f);
+                        comp.FullyFaded = true;
+                        comp.Fading = false;
                     }
+                }
+                if (comp.Fading)
+                {
+                    comp.FadeProgress = comp.FadeTime - _timing.RealTime;
+                    targetAlpha = Math.Clamp((float)(comp.FadeProgress / FadeLength) + targetAlpha, 0f, 1f);
                 }
             }
             else
