@@ -42,16 +42,10 @@ public sealed partial class ESViewconeOccludableComponent : Component, IComponen
     [DataField, AutoNetworkedField]
     public bool RemoveOnPullDropped = false;
 
-    [DataField, AutoNetworkedField]
+    // funky - client side variables for gradual fading
     public TimeSpan FadeTime;
-
-    [DataField, AutoNetworkedField]
     public TimeSpan FadeProgress = TimeSpan.Zero;
-
-    [DataField, AutoNetworkedField]
     public bool FullyFaded = true; // assume occluded by default
-
-    [DataField, AutoNetworkedField]
     public bool Fading;
 
     // Clientside comptree stuff

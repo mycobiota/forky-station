@@ -122,17 +122,22 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
             var distAlpha = Math.Clamp((distLength - cone.ConeIgnoreRadius) + (cone.ConeIgnoreFeather * 0.5f), 0f, cone.ConeIgnoreFeather) / cone.ConeIgnoreFeather;
             var targetAlpha = Math.Max(1f - angleAlpha, 1f - distAlpha);
 
-            if (Math.Abs(targetAlpha - baseAlpha) > 0.01f)
+            // funky start - apply the fade gradually over time
+            // only do gradual fading behaviour if the object has become occluded
+            // todo: the temporary fake entity that gets created when an item gets picked up needs to be occluded properly
+            if (!MathHelper.CloseTo(targetAlpha, baseAlpha))
             {
                 if (!comp.FullyFaded && comp.FadeProgress <= TimeSpan.Zero)
                 {
                     if (!comp.Fading)
                     {
+                        // fading has just begun, so get the point in time where fading should be complete
                         comp.FadeTime = _timing.RealTime + FadeLength;
                         comp.Fading = true;
                     }
                     else
                     {
+                        // fading already began, meaning it's finished now
                         comp.FullyFaded = true;
                         comp.Fading = false;
                     }
@@ -143,12 +148,13 @@ public sealed partial class ESViewconeSetAlphaOverlay : Overlay
                     targetAlpha = Math.Clamp((float)(comp.FadeProgress / FadeLength) + targetAlpha, 0f, 1f);
                 }
             }
-            else
+            else // object is not occluded, so reset fading variables
             {
                 comp.FullyFaded = false;
                 comp.Fading = false;
                 comp.FadeProgress = TimeSpan.Zero;
             }
+            // funky end
 
             // save the results so we can use it in resetalpha overlay
             _cone.CachedBaseAlphas.Add(((uid, sprite), baseAlpha));
