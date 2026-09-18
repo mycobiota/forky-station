@@ -1,6 +1,7 @@
 - type: radioChannelColors
   id: DefaultChannelColors
-  name: Default (Wizard's Den)
+  name: ui-options-radio-colors-default
+  order: 0
   colors:
     Common: "#2cdb2c"
     CentCom: "#2681a5"
@@ -20,7 +21,8 @@
 
 - type: radioChannelColors
   id: FunkyChannelColors
-  name: Funky
+  name: ui-options-radio-colors-funky
+  order: 1
   colors:
     Common: "#c4f129"
     CentCom: "#42a45d"
@@ -37,7 +39,7 @@
     Freelance: "#e27285"
     Xenoborg: "#7864c6"
     Mothership: "#fad6ff"
-    Emergency: "#db4373" # funky original channels start here
+    Emergency: "#db4373" # funky original channels start here - they technically don't need to be specified, itll fall back to whatever is set on the radio channel prototype
     InternalAffairs: "#bda499"
     Prisoner: "#dddbc5"
     Hailing: "#f6ce64"
