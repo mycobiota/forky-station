@@ -14,16 +14,18 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
     [Dependency] private IConfigurationManager _cfg = null!;
     [Dependency] private ILogManager _logManager = null!;
 
-    private readonly CVarDef<string> _colorPresetCvar = RadioChannelColorCvar.ChannelColorPreset;
+    private static readonly ProtoId<RadioChannelColorsPrototype> DefaultChannelColors = "DefaultChannelColors";
+    private static readonly CVarDef<string> ColorPresetCvar = RadioChannelColorCvar.ChannelColorPreset;
 
     private ISawmill _sawmill = null!;
 
     public bool TryGetRadioChannelColor(ProtoId<RadioChannelPrototype> channel, [NotNullWhen(true)] out Color? color)
     {
-        var colorPresetId = _cfg.GetCVar(_colorPresetCvar);
+        var colorPresetId = _cfg.GetCVar(ColorPresetCvar);
         if (!_prototypeManager.TryIndex<RadioChannelColorsPrototype>(colorPresetId, out var channelColors))
         {
-            _sawmill.Warning("No such radio channel color preset \"{colorPresetId}\" exists.", colorPresetId);
+            _sawmill.Warning("No such radio channel color preset {colorPresetId} exists. Resetting to default ({DefaultChannelColors}).", colorPresetId, DefaultChannelColors);
+            _cfg.SetCVar(ColorPresetCvar, DefaultChannelColors);
         }
         else if (channelColors.Colors.TryGetValue(channel, out var channelColor))
         {
@@ -37,7 +39,7 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
             return true;
         }
 
-        _sawmill.Warning("Tried to get the color of an unknown channel \"{channel}\".", channel);
+        _sawmill.Warning("Tried to get the color of an unknown channel {channel}.", channel);
         color = null;
         return false;
     }
