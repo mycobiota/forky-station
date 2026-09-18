@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Client._Funkystation.Radio;
 using Content.Shared.Radio;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
@@ -11,7 +12,7 @@ namespace Content.Client._Funkystation.UserInterface.RichText;
 [UsedImplicitly]
 public sealed partial class RadioChannelColorTag : IMarkupTagHandler
 {
-    [Dependency] private IPrototypeManager _protoManager = null!;
+    [Dependency] private RadioChannelColorManager _channelColors = null!;
 
     public static readonly Color DefaultColor = ColorTag.DefaultColor;
     public string Name => "radiochannel";
@@ -21,13 +22,13 @@ public sealed partial class RadioChannelColorTag : IMarkupTagHandler
     {
         // ReSharper disable once InconsistentNaming
         if (!node.Value.TryGetString(out var channelID)
-            || !_protoManager.TryIndex<RadioChannelPrototype>(channelID, out var channel))
+            || !_channelColors.TryGetRadioChannelColor(channelID, out var color))
         {
             context.Color.Push(DefaultColor);
             return;
         }
 
-        context.Color.Push(channel.Color);
+        context.Color.Push(color.Value);
     }
 
     /// <inheritdoc/>

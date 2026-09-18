@@ -1,3 +1,4 @@
+using Content.Client._Funkystation.Radio;
 using Content.Client.Administration.Managers;
 using Content.Client.Audio.Midi;
 using Content.Client.Changelog;
@@ -70,6 +71,7 @@ namespace Content.Client.IoC
             collection.Register<ClientFeedbackManager>();
             collection.Register<ISharedFeedbackManager, ClientFeedbackManager>();
             collection.Register<MidiFileCollectionManager>();
+            collection.Register<RadioChannelColorManager>(); // funky - radio channel color presets
         }
     }
 }
