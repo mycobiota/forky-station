@@ -8,6 +8,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Funkystation.Radio;
 
+/// <summary>
+/// Manages getting the currently selected channel color for <see cref="UserInterface.RichText.RadioChannelColorTag"/>
+/// </summary>
 public sealed partial class RadioChannelColorManager : IPostInjectInit
 {
     [Dependency] private IPrototypeManager _prototypeManager = null!;
@@ -19,6 +22,14 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
 
     private ISawmill _sawmill = null!;
 
+    /// <summary>
+    /// Gets the channel color based on the color preset specified by <see cref="RadioChannelColorCvar.ChannelColorPreset"/>
+    /// or by the channel's default color if unspecified in the chosen preset.
+    /// </summary>
+    /// <param name="channel">ProtoId for the radio channel we want the chosen color for.</param>
+    /// <param name="color"></param>
+    /// <returns>True when a color was successfully found, either in the chosen color preset or the default specified in the channel's prototype,
+    /// or false when the provided channel couldn't be found.</returns>
     public bool TryGetRadioChannelColor(ProtoId<RadioChannelPrototype> channel, [NotNullWhen(true)] out Color? color)
     {
         var colorPresetId = _cfg.GetCVar(ColorPresetCvar);

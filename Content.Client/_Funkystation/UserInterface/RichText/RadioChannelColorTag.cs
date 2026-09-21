@@ -20,9 +20,8 @@ public sealed partial class RadioChannelColorTag : IMarkupTagHandler
     /// <inheritdoc/>
     public void PushDrawContext(MarkupNode node, MarkupDrawingContext context)
     {
-        // ReSharper disable once InconsistentNaming
-        if (!node.Value.TryGetString(out var channelID)
-            || !_channelColors.TryGetRadioChannelColor(channelID, out var color))
+        if (!node.Value.TryGetString(out var channelId)
+            || !_channelColors.TryGetRadioChannelColor(channelId, out var color))
         {
             context.Color.Push(DefaultColor);
             return;

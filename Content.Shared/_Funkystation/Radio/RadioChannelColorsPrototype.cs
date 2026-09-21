@@ -10,14 +10,20 @@ public sealed partial class RadioChannelColorsPrototype : IPrototype, IComparabl
     [IdDataField]
     public string ID { get; private set; } = null!;
 
-    [DataField]
+    /// <summary>
+    /// The localized name of the color preset, to be displayed in the settings menu.
+    /// </summary>
+    [DataField(required: true)]
     public LocId Name { get; private set; } = string.Empty;
 
+    /// <summary>
+    /// The radio channels and their associated colors specified by this preset.
+    /// </summary>
     [DataField(required: true)]
     public required Dictionary<ProtoId<RadioChannelPrototype>, Color> Colors;
 
     /// <summary>
-    /// An order for the themes to be displayed in the UI
+    /// The point in the list in the player settings the preset should be sorted at.
     /// </summary>
     [DataField]
     public int Order = 0;
