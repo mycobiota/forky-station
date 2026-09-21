@@ -21,6 +21,9 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
     private static readonly CVarDef<string> ColorPresetCvar = RadioChannelColorCvar.ChannelColorPreset;
     private static readonly CVarDef<bool> EnforceProtoDefaultsCvar = RadioChannelColorCvar.EnforceProtoDefaultColors;
 
+    private ProtoId<RadioChannelColorsPrototype> _currentPreset;
+    private bool _enforceProtoDefaults;
+
     private ISawmill _sawmill = null!;
 
     /// <summary>
@@ -33,12 +36,11 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
     /// or false when the provided channel couldn't be found.</returns>
     public bool TryGetRadioChannelColor(ProtoId<RadioChannelPrototype> channel, [NotNullWhen(true)] out Color? color)
     {
-        if (!_cfg.GetCVar(EnforceProtoDefaultsCvar))
+        if (!_enforceProtoDefaults)
         {
-            var colorPresetId = _cfg.GetCVar(ColorPresetCvar);
-            if (!_prototypeManager.TryIndex<RadioChannelColorsPrototype>(colorPresetId, out var channelColors))
+            if (!_prototypeManager.TryIndex(_currentPreset, out var channelColors))
             {
-                _sawmill.Warning("No such radio channel color preset {colorPresetId} exists. Resetting to default ({DefaultChannelColors}).", colorPresetId, DefaultChannelColors);
+                _sawmill.Warning("No such radio channel color preset {currentPreset} exists. Resetting to default ({DefaultChannelColors}).", _currentPreset, DefaultChannelColors);
                 _cfg.SetCVar(ColorPresetCvar, DefaultChannelColors);
             }
             else if (channelColors.Colors.TryGetValue(channel, out var channelColor))
@@ -62,5 +64,7 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
     public void PostInject()
     {
         _sawmill = _logManager.GetSawmill("radio_channel_color_manager");
+        _cfg.OnValueChanged(ColorPresetCvar, value => _currentPreset = value, true);
+        _cfg.OnValueChanged(EnforceProtoDefaultsCvar, value => _enforceProtoDefaults = value, true);
     }
 }
