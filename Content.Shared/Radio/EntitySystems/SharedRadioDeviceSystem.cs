@@ -454,7 +454,7 @@ public abstract partial class SharedRadioDeviceSystem : EntitySystem
                 ("micState", state),
                 ("color", color)));
             args.PushMarkup(Loc.GetString("handheld-radio-component-mic-freq-examine",
-                ("protoID", proto.ID),
+                ("protoID", proto.ID), // add radio channel tags to allow color customization by the player
                 ("id", proto.LocalizedName),
                 ("freq", proto.Frequency)));
         }
