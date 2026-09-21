@@ -9,6 +9,7 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Options.UI.Tabs;
@@ -18,6 +19,7 @@ public sealed partial class MiscTab : Control
 {
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IConfigurationManager _cfg = null!; // funky
 
     public MiscTab()
     {
@@ -67,6 +69,8 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
         Control.AddOptionCheckBox(CCVars.InterfaceChatFollowButton, ChatFollowButton);
+
+        DropDownRadioColors.Visible = !_cfg.GetCVar(RadioChannelColorCvar.EnforceProtoDefaultColors); // funky
 
         Control.Initialize();
     }

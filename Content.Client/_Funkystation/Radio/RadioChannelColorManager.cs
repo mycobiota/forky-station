@@ -19,6 +19,7 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
 
     private static readonly ProtoId<RadioChannelColorsPrototype> DefaultChannelColors = "DefaultChannelColors";
     private static readonly CVarDef<string> ColorPresetCvar = RadioChannelColorCvar.ChannelColorPreset;
+    private static readonly CVarDef<bool> EnforceProtoDefaultsCvar = RadioChannelColorCvar.EnforceProtoDefaultColors;
 
     private ISawmill _sawmill = null!;
 
@@ -32,16 +33,19 @@ public sealed partial class RadioChannelColorManager : IPostInjectInit
     /// or false when the provided channel couldn't be found.</returns>
     public bool TryGetRadioChannelColor(ProtoId<RadioChannelPrototype> channel, [NotNullWhen(true)] out Color? color)
     {
-        var colorPresetId = _cfg.GetCVar(ColorPresetCvar);
-        if (!_prototypeManager.TryIndex<RadioChannelColorsPrototype>(colorPresetId, out var channelColors))
+        if (!_cfg.GetCVar(EnforceProtoDefaultsCvar))
         {
-            _sawmill.Warning("No such radio channel color preset {colorPresetId} exists. Resetting to default ({DefaultChannelColors}).", colorPresetId, DefaultChannelColors);
-            _cfg.SetCVar(ColorPresetCvar, DefaultChannelColors);
-        }
-        else if (channelColors.Colors.TryGetValue(channel, out var channelColor))
-        {
-            color = channelColor;
-            return true;
+            var colorPresetId = _cfg.GetCVar(ColorPresetCvar);
+            if (!_prototypeManager.TryIndex<RadioChannelColorsPrototype>(colorPresetId, out var channelColors))
+            {
+                _sawmill.Warning("No such radio channel color preset {colorPresetId} exists. Resetting to default ({DefaultChannelColors}).", colorPresetId, DefaultChannelColors);
+                _cfg.SetCVar(ColorPresetCvar, DefaultChannelColors);
+            }
+            else if (channelColors.Colors.TryGetValue(channel, out var channelColor))
+            {
+                color = channelColor;
+                return true;
+            }
         }
 
         if (_prototypeManager.TryIndex(channel, out var channelProto))
