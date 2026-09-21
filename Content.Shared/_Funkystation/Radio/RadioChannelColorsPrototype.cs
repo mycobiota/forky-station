@@ -3,6 +3,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Funkystation.Radio;
 
+// Realized far too late that this is basically a specialized ColorPalettePrototype
 [Prototype]
 public sealed partial class RadioChannelColorsPrototype : IPrototype, IComparable<RadioChannelColorsPrototype>
 {
