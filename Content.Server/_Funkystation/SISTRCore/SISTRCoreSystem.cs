@@ -42,11 +42,10 @@ public sealed partial class SistrCoreSystem : EntitySystem
         if (ent.Owner == args.RadioSource)
             return;
 
-        if (!TryComp<SistrTerminalComponent>(ent, out var terminal))
-            return;
+        if (ent.Comp.RadioMessages.Count >= ent.Comp.RadioMessages.Capacity)
+            ent.Comp.RadioMessages.Dequeue();
 
-        // todo: we'll be smarter about this later
-        terminal.RadioMessages.Add($"{Name(args.MessageSource)}: {args.Message}");
-        Dirty<SistrTerminalComponent>((ent.Owner, terminal));
+        ent.Comp.RadioMessages.Enqueue($"{Name(args.MessageSource)}: {args.Message}");
+        Dirty(ent);
     }
 }

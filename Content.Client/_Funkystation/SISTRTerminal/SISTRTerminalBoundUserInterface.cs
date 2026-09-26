@@ -1,4 +1,5 @@
 using Content.Client._Funkystation.Unions.UI;
+using Content.Server._Funkystation.SistrCore;
 using Content.Shared._Funkystation.SISTRTerminal;
 using Robust.Client.UserInterface;
 using Robust.Shared.Utility;
@@ -22,7 +23,7 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
         _terminal = this.CreateWindow<SistrTerminalUi>();
         _terminal.CommandEntered += OnCommandEntered;
 
-        if (!EntMan.TryGetComponent<SistrTerminalComponent>(Owner, out var sistrComp))
+        if (!EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrComp))
             return;
 
         foreach (var message in sistrComp.RadioMessages)
