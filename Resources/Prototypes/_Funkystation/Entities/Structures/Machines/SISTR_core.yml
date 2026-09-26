@@ -30,6 +30,14 @@
         powerLight:
           True: { visible: true }
           False: { visible: false }
+  - type: ActivatableUI
+    requiresComplex: true
+    singleUser: true
+    key: enum.SistrTerminalUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SistrTerminalUiKey.Key:
+        type: SistrTerminalBoundUserInterface
   - type: ApcPowerReceiver
     powerLoad: 1000
   - type: PointLight

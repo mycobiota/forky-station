@@ -1,0 +1,14 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="SIS/TR Terminal"
+                      Name="SisTerminal"
+                      Resizable="False"
+                      SetSize="600 600"> <!-- todo: use loc strings -->
+    <PanelContainer>
+        <BoxContainer Orientation="Vertical">
+            <OutputPanel Name="TerminalOutput" VerticalExpand="True"></OutputPanel>
+            <HistoryLineEdit Name="TerminalLineInput"></HistoryLineEdit>
+        </BoxContainer>
+    </PanelContainer>
+
+</controls:FancyWindow>
