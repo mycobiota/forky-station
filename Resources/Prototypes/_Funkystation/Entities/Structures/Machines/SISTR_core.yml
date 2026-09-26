@@ -6,7 +6,7 @@
   components:
   - type: SistrCore
   - type: PAAnnouncer
-  - type: RadioSpeaker
+  - type: ActiveRadio
     channels:
     - Binary
   - type: ChatRepeatIgnoreSender
