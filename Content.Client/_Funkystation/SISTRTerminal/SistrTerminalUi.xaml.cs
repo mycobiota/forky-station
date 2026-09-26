@@ -15,11 +15,26 @@ public sealed partial class SistrTerminalUi : FancyWindow
     {
         RobustXamlLoader.Load(this);
 
-        TerminalLineInput.OnTextEntered += args => CommandEntered?.Invoke(args.Text);
+        TerminalLineInput.OnTextEntered += args =>
+        {
+            TerminalLineInput.Clear();
+            AddLine($"> {args.Text}");
+            CommandEntered?.Invoke(args.Text);
+        };
     }
 
-    public void AddLine(string s)
+    public void AddLine(string message)
     {
-        TerminalOutput.AddMessage(FormattedMessage.FromUnformatted(s));
+        AddLineFormatted(FormattedMessage.FromUnformatted(message));
+    }
+
+    public void AddLineFormatted(FormattedMessage message)
+    {
+        TerminalOutput.AddMessage(message);
+    }
+
+    public void ClearTerminal()
+    {
+        TerminalOutput.Clear();
     }
 }

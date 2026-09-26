@@ -6,7 +6,7 @@
                       SetSize="600 600"> <!-- todo: use loc strings -->
     <PanelContainer>
         <BoxContainer Orientation="Vertical">
-            <OutputPanel Name="TerminalOutput" VerticalExpand="True"></OutputPanel>
+            <OutputPanel Name="TerminalOutput" VerticalExpand="True"/>
             <HistoryLineEdit Name="TerminalLineInput"></HistoryLineEdit>
         </BoxContainer>
     </PanelContainer>
