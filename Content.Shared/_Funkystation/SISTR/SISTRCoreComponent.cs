@@ -3,7 +3,7 @@
 namespace Content.Server._Funkystation.SistrCore;
 
 // funky. marks the sis/tr core
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class SistrCoreComponent : Component
 {
     [AutoNetworkedField]

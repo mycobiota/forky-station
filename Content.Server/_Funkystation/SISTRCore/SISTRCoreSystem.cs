@@ -3,6 +3,7 @@ using Content.Server.Power.EntitySystems;
 using Content.Shared._Funkystation.SISTRTerminal;
 using Content.Shared.Radio;
 using Content.Shared.Station.Components;
+using Robust.Server.GameObjects;
 
 namespace Content.Server._Funkystation.SistrCore;
 
@@ -12,6 +13,7 @@ namespace Content.Server._Funkystation.SistrCore;
 public sealed partial class SistrCoreSystem : EntitySystem
 {
     [Dependency] private PowerReceiverSystem _power = null!;
+    [Dependency] private SharedUserInterfaceSystem _ui = null!;
 
     private bool GridHasFunctionalCore(EntityUid grid)
     {
@@ -47,5 +49,14 @@ public sealed partial class SistrCoreSystem : EntitySystem
 
         ent.Comp.RadioMessages.Enqueue($"{Name(args.MessageSource)}: {args.Message}");
         Dirty(ent);
+    }
+
+    [SubscribeLocalEvent]
+    public void OnAfterAutoHandleStateEvent(Entity<SistrCoreComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (_ui.TryGetOpenUi(ent.Owner, SistrTerminalUiKey.Key, out var bui))
+        {
+            bui.Update();
+        }
     }
 }

@@ -1,4 +1,6 @@
+using Content.Client._Funkystation.SISTRTerminal.Programs;
 using Content.Client._Funkystation.Unions.UI;
+using Content.Client.UserInterface.ControlExtensions;
 using Content.Server._Funkystation.SistrCore;
 using Content.Shared._Funkystation.SISTRTerminal;
 using Robust.Client.UserInterface;
@@ -10,53 +12,22 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 {
     private SistrTerminalUi? _terminal;
 
-    private Dictionary<string, Action<string[]>> _commands = new ();
-
     protected override void Open()
     {
         base.Open();
 
-        // todo: better way of defining commands
-        _commands.Add("clear", ClearTerminal);
-        _commands.Add("echo", EchoCommand);
-
         _terminal = this.CreateWindow<SistrTerminalUi>();
-        _terminal.CommandEntered += OnCommandEntered;
+    }
 
-        if (!EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrComp))
-            return;
+    public override void Update()
+    {
+        base.Update();
 
-        foreach (var message in sistrComp.RadioMessages)
+        if (_terminal?.CurrentProgram == "binarychat" && EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrCoreComponent))
         {
-            _terminal.AddLine(message);
+            _terminal.GetControlOfType<SistrBinaryChat>()
+                .Pop()
+                .Update(sistrCoreComponent.RadioMessages);
         }
     }
-
-    private void OnCommandEntered(string input)
-    {
-        ParseCommand(input);
-    }
-
-    private void ParseCommand(string command)
-    {
-        var arguments = command.Split(' ');
-        _commands.TryGetValue(arguments[0], out var action);
-        action?.Invoke(arguments[1..]);
-    }
-
-    private void ClearTerminal(string[] args)
-    {
-        _terminal?.ClearTerminal();
-    }
-
-    private void EchoCommand(string[] args)
-    {
-        var input = string.Join(' ', args);
-        _terminal?.AddLine(input);
-    }
-    //
-    // private void PrintMessageLog(string[] args)
-    // {
-    //
-    // }
 }

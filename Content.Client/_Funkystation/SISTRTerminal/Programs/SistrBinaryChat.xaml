@@ -1,0 +1,6 @@
+<programs:SistrBinaryChat xmlns="https://spacestation14.io"
+              xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs"
+              Orientation="Vertical">
+    <OutputPanel Name="ChatLog" VerticalExpand="True"/>
+    <HistoryLineEdit Name="ChatInput"></HistoryLineEdit>
+</programs:SistrBinaryChat>
