@@ -39,6 +39,8 @@
     interfaces:
       enum.SistrTerminalUiKey.Key:
         type: SistrTerminalBoundUserInterface
+      enum.SistrAutomaTalkKey.Key:
+        type: SistrAutomaTalkBoundUserInterface
   - type: ApcPowerReceiver
     powerLoad: 1000
   - type: PointLight

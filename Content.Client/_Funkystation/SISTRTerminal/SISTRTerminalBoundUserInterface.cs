@@ -46,28 +46,19 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
         if (localEntity == null || !EntMan.TryGetComponent<UserInterfaceComponent>(Owner, out var uiComp))
             return;
 
-        _ui.SetUi((Owner, uiComp), key, data);
-        if (!_ui.TryOpenUi((Owner, uiComp), key, localEntity.Value))
+        if (!_ui.TryOpenUi((Owner, uiComp), key, localEntity.Value, true)) // the issue is that youre trying to do this without telling the server
         {
             _sawmill?.Debug("Couldn't open UI");
             return;
         }
-        _ui.TryGetOpenUi((Owner, uiComp), key, out SistrProgramBui? program);
-        if (program == null)
+        if (!_ui.TryGetOpenUi((Owner, uiComp), key, out SistrProgramBui? program))
         {
             _sawmill?.Debug("Program was null");
             return;
         }
 
-        var control = program.CreateControl();
-        if (control == null)
-        {
-            _sawmill?.Debug("Control was null");
-            program.Close();
-            return;
-        }
-
-        _terminal?.OpenProgram(control);
+        program.CreateControl(out var control);
+        _terminal?.OpenProgram(ref control);
         program.ExitProgram += HandleExitProgram;
     }
 
@@ -81,5 +72,5 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 public abstract class SistrProgramBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     public Action<SistrProgramBui>? ExitProgram;
-    public abstract SistrProgramControl? CreateControl();
+    public abstract void CreateControl(out SistrProgramControl control);
 }

@@ -1,5 +1,6 @@
 using Content.Shared._Funkystation.SistrCore;
 using JetBrains.Annotations;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 
 namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
@@ -9,16 +10,15 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
 {
     private SistrAutomaTalk? _automaTalk;
 
-    public override SistrProgramControl? CreateControl()
+    public override void CreateControl(out SistrProgramControl control)
     {
         _automaTalk = this.CreateDisposableControl<SistrAutomaTalk>();
         _automaTalk.ExitProgram += OnExit;
-        return _automaTalk;
+        control = _automaTalk;
     }
 
     private void OnExit()
     {
-        _automaTalk?.Orphan();
         ExitProgram?.Invoke(this);
     }
 

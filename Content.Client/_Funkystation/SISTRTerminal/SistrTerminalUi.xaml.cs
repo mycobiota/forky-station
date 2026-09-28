@@ -17,7 +17,7 @@ public sealed partial class SistrTerminalUi : FancyWindow
         RobustXamlLoader.Load(this);
     }
 
-    public void OpenProgram(SistrProgramControl program)
+    public void OpenProgram(ref SistrProgramControl program)
     {
         SistrCommandLine.Visible = false;
         InternalWindow.AddChild(program);
