@@ -5,7 +5,7 @@
                       Name="SisTerminal"
                       Resizable="False"
                       SetSize="600 600"> <!-- todo: use loc strings -->
-    <PanelContainer>
+    <PanelContainer Name="InternalWindow">
         <programs:SistrCommandLine Name="SistrCommandLine" Access="Public"/>
     </PanelContainer>
 
