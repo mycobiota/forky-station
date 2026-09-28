@@ -7,3 +7,9 @@ public enum SistrTerminalUiKey
 {
     Key,
 }
+
+[Serializable, NetSerializable]
+public enum SistrAutomaTalkKey
+{
+    Key,
+}

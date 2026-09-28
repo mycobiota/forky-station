@@ -5,11 +5,11 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client._Funkystation.SISTRTerminal.Programs;
 
 [GenerateTypedNameReferences]
-public sealed partial class SistrBinaryChat : SistrProgram
+public sealed partial class SistrAutomaTalk : SistrProgramControl
 {
     public Action<string>? SendMessage;
 
-    public SistrBinaryChat()
+    public SistrAutomaTalk()
     {
         RobustXamlLoader.Load(this);
 
@@ -45,6 +45,6 @@ public sealed partial class SistrBinaryChat : SistrProgram
 
     private void Exit()
     {
-        ExitProgram?.Invoke(this);
+        ExitProgram?.Invoke();
     }
 }

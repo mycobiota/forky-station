@@ -7,7 +7,7 @@ using Robust.Shared.Utility;
 namespace Content.Client._Funkystation.SISTRTerminal.Programs;
 
 [GenerateTypedNameReferences]
-public sealed partial class SistrCommandLine : SistrProgram
+public sealed partial class SistrCommandLine : BoxContainer
 {
     public Action<string[]>? RunProgram;
 
@@ -31,12 +31,12 @@ public sealed partial class SistrCommandLine : SistrProgram
         _commands.Add("run", RunProgramCommand);
     }
 
-    public void AddLine(string message)
+    private void AddLine(string message)
     {
         AddLineFormatted(FormattedMessage.FromUnformatted(message));
     }
 
-    public void AddLineFormatted(FormattedMessage message)
+    private void AddLineFormatted(FormattedMessage message)
     {
         TerminalOutput.AddMessage(message);
     }

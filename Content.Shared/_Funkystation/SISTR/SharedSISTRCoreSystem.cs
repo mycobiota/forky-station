@@ -24,7 +24,7 @@ public sealed partial class SharedSistrCoreSystem : EntitySystem
     [SubscribeLocalEvent]
     public void OnAfterAutoHandleStateEvent(Entity<SistrCoreComponent> ent, ref AfterAutoHandleStateEvent args)
     {
-        if (_ui.TryGetOpenUi(ent.Owner, SistrTerminalUiKey.Key, out var bui))
+        if (_ui.TryGetOpenUi(ent.Owner, SistrAutomaTalkKey.Key, out var bui))
         {
             bui.Update();
         }
