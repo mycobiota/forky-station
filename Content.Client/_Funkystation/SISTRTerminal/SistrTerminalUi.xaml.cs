@@ -28,4 +28,15 @@ public sealed partial class SistrTerminalUi : FancyWindow
 public abstract class SistrProgramControl : BoxContainer
 {
     public Action? ExitProgram;
+
+    protected virtual void Exit()
+    {
+        ExitProgram?.Invoke();
+    }
+
+    protected override void ExitedTree()
+    {
+        base.ExitedTree();
+        Exit();
+    }
 }

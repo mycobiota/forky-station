@@ -6,6 +6,6 @@ namespace Content.Shared._Funkystation.SistrCore;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class SistrCoreComponent : Component
 {
-    [AutoNetworkedField]
+    [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
     public Queue<string> RadioMessages = new (15);
 }

@@ -11,9 +11,6 @@ public sealed partial class SharedSistrCoreSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnReceiveRadio(Entity<SistrCoreComponent> ent, ref RadioReceiveEvent args)
     {
-        if (ent.Owner == args.RadioSource)
-            return;
-
         if (ent.Comp.RadioMessages.Count >= ent.Comp.RadioMessages.Capacity)
             ent.Comp.RadioMessages.Dequeue();
 

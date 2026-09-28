@@ -1,4 +1,6 @@
+using Content.Shared._Funkystation.SISTR;
 using Content.Shared._Funkystation.SistrCore;
+using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.EntitySystems;
 using JetBrains.Annotations;
@@ -11,7 +13,7 @@ namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 [UsedImplicitly]
 public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, Enum uiKey) : SistrProgramBui(owner, uiKey)
 {
-    [Dependency] private SharedRadioSystem _radioSystem = null!;
+    [Dependency] private SharedChatSystem _chat = null!;
 
     private static readonly ProtoId<RadioChannelPrototype> BinaryChannel = "Binary";
 
@@ -34,15 +36,23 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
 
     private void OnSendMessage(string message)
     {
-        var author = PlayerManager.LocalEntity ?? Owner;
-
-        _radioSystem.SendRadioMessage(author, message, BinaryChannel, Owner);
+        SendMessage(new AutomaTalkChatMessage(message, BinaryChannel));
     }
 
     public override void Update()
     {
         base.Update();
+        RefreshChatLog();
+    }
 
+    protected override void Open()
+    {
+        base.Open();
+        RefreshChatLog();
+    }
+
+    private void RefreshChatLog()
+    {
         if (EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrCoreComponent))
         {
             _automaTalk?.Update(sistrCoreComponent.RadioMessages);

@@ -7,8 +7,6 @@ namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 public sealed partial class SistrAutomaTalk : SistrProgramControl
 {
     public Action<string>? SendMessage;
-    [Dependency] private ILogManager _logManager = null!;
-    private ISawmill _sawmill;
 
     public SistrAutomaTalk()
     {
@@ -19,9 +17,6 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
             ChatInput.Clear();
             ParseInput(input.Text);
         };
-
-        IoCManager.InjectDependencies(this);
-        _sawmill = _logManager.GetSawmill("automatalk");
     }
 
     private void ParseInput(string input)
@@ -47,8 +42,8 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
         }
     }
 
-    private void Exit()
+    public void AddLine(string message)
     {
-        ExitProgram?.Invoke();
+        ChatLog.AddText(message);
     }
 }
