@@ -20,11 +20,18 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
         base.Open();
 
         _sawmill = _logManager.GetSawmill("SISTR");
+        if (!EntMan.TryGetComponent<SistrTerminalComponent>(Owner, out var terminalComp))
+        {
+            _sawmill?.Debug($"Failed to get Terminal component for {EntMan.ToPrettyString(Owner)}.");
+            return;
+        }
+
+        _programs = terminalComp.Programs;
 
         _terminal = this.CreateWindow<SistrTerminalUi>();
-        _programs.Add("automatalk", (SistrAutomaTalkKey.Key, new InterfaceData(nameof(SistrAutomaTalkBoundUserInterface))));
 
         _terminal.SistrCommandLine.RunProgram += HandleRunProgram;
+
     }
 
     private void HandleRunProgram(string[] args)
@@ -71,6 +78,7 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 
 public abstract class SistrProgramBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
+    public abstract string Name { get; }
     public Action<SistrProgramBui>? ExitProgram;
     public abstract void CreateControl(out SistrProgramControl control);
 }

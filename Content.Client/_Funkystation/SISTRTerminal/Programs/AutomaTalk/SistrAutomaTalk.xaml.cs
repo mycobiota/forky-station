@@ -51,17 +51,4 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
     {
         ExitProgram?.Invoke();
     }
-
-    protected override void VisibilityChanged(bool visibility)
-    {
-        base.VisibilityChanged(visibility);
-        _sawmill.Debug($"some bulllshit just happened. visibility:{visibility}");
-    }
-
-    protected override void ExitedTree()
-    {
-        base.ExitedTree();
-        _sawmill.Debug($"some bulllshit just happened. exited tree");
-        ExitProgram?.Invoke();
-    }
 }

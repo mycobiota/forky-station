@@ -30,7 +30,6 @@
         powerLight:
           True: { visible: true }
           False: { visible: false }
-  - type: SistrTerminal
   - type: ActivatableUI
     requiresComplex: true
     singleUser: true
@@ -41,6 +40,11 @@
         type: SistrTerminalBoundUserInterface
       enum.SistrAutomaTalkKey.Key:
         type: SistrAutomaTalkBoundUserInterface
+  - type: SistrTerminal
+    programs:
+      automatalk:
+        enum.SistrAutomaTalkKey.Key:
+          type: SistrAutomaTalkBoundUserInterface
   - type: ApcPowerReceiver
     powerLoad: 1000
   - type: PointLight
