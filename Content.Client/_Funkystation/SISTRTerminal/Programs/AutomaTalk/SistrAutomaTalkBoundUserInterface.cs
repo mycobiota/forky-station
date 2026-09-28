@@ -2,23 +2,17 @@ using Content.Shared._Funkystation.SistrCore;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._Funkystation.SISTRTerminal.Programs;
+namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 
 [UsedImplicitly]
 public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, Enum uiKey) : SistrProgramBui(owner, uiKey)
 {
     private SistrAutomaTalk? _automaTalk;
 
-    protected override void Open()
+    public override SistrProgramControl? CreateControl()
     {
-        base.Open();
         _automaTalk = this.CreateDisposableControl<SistrAutomaTalk>();
         _automaTalk.ExitProgram += OnExit;
-    }
-
-    public override SistrProgramControl? CreateSistrProgram()
-    {
-        Open();
         return _automaTalk;
     }
 

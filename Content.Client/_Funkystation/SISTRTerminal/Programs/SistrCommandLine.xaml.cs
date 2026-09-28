@@ -31,12 +31,12 @@ public sealed partial class SistrCommandLine : BoxContainer
         _commands.Add("run", RunProgramCommand);
     }
 
-    private void AddLine(string message)
+    public void AddLine(string message)
     {
         AddLineFormatted(FormattedMessage.FromUnformatted(message));
     }
 
-    private void AddLineFormatted(FormattedMessage message)
+    public void AddLineFormatted(FormattedMessage message)
     {
         TerminalOutput.AddMessage(message);
     }
