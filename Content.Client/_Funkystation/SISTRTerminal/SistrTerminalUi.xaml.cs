@@ -21,7 +21,7 @@ public sealed partial class SistrTerminalUi : FancyWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-        _programs.Add("binarychat", RunProgram<SistrCommandLine>);
+        _programs.Add("binarychat", RunProgram<SistrBinaryChat>);
 
         CurrentProgram = "CommandLine";
         SistrCommandLine.RunProgram += HandleRunProgram;
@@ -45,10 +45,14 @@ public sealed partial class SistrTerminalUi : FancyWindow
 
     private void RunProgram<T>() where T : SistrProgram, new()
     {
-        SistrCommandLine.Visible = false;
         var program = _sandboxHelper.CreateInstance(typeof(T)) as T;
-        AddChild(program!);
-        program!.ExitProgram += HandleExitProgram;
+        if (program == null)
+            return;
+
+        SistrCommandLine.Visible = false;
+
+        AddChild(program);
+        program.ExitProgram += HandleExitProgram;
     }
 }
 
