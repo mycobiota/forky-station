@@ -31,21 +31,13 @@ public sealed partial class SistrCommandLine : BoxContainer
         _commands.Add("run", RunProgramCommand);
     }
 
-    public void AddLine(string message)
-    {
-        AddLineFormatted(FormattedMessage.FromUnformatted(message));
-    }
-
-    public void AddLineFormatted(FormattedMessage message)
-    {
-        TerminalOutput.AddMessage(message);
-    }
-
     private void ParseCommand(string command)
     {
         var arguments = command.Split(' ');
-        _commands.TryGetValue(arguments[0], out var action);
-        action?.Invoke(arguments[1..]);
+        if (!_commands.TryGetValue(arguments[0], out var action))
+            AddLine("No such command or program exists.");
+        else
+            action.Invoke(arguments[1..]);
     }
 
     private void RunProgramCommand(string[] args)
@@ -62,5 +54,20 @@ public sealed partial class SistrCommandLine : BoxContainer
     {
         var input = string.Join(' ', args);
         AddLine(input);
+    }
+
+    public void AddLine(string message)
+    {
+        AddLineFormatted(FormattedMessage.FromUnformatted(message));
+    }
+
+    public void AddLineFormatted(FormattedMessage message)
+    {
+        TerminalOutput.AddMessage(message);
+    }
+
+    public void FocusInput()
+    {
+        TerminalLineInput.GrabKeyboardFocus();
     }
 }

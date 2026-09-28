@@ -1,0 +1,9 @@
+<programs:SistrMassScanner xmlns="https://spacestation14.io"
+                          xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs.MassScanner"
+                          xmlns:shuttleui="clr-namespace:Content.Client.Shuttles.UI"
+                          Orientation="Vertical">
+    <shuttleui:ShuttleNavControl Name="RadarScreen"
+                                 Margin="15"
+                                  />
+    <HistoryLineEdit Name="LineInput"></HistoryLineEdit>
+</programs:SistrMassScanner>

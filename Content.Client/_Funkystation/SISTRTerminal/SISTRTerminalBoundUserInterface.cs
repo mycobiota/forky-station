@@ -81,4 +81,9 @@ public abstract class SistrProgramBui(EntityUid owner, Enum uiKey) : BoundUserIn
     public abstract string Name { get; }
     public Action<SistrProgramBui>? ExitProgram;
     public abstract void CreateControl(out SistrProgramControl control);
+
+    protected virtual void OnExit()
+    {
+        ExitProgram?.Invoke(this);
+    }
 }

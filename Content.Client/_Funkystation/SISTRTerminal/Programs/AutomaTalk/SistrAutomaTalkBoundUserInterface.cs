@@ -29,11 +29,6 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
         control = _automaTalk;
     }
 
-    private void OnExit()
-    {
-        ExitProgram?.Invoke(this);
-    }
-
     private void OnSendMessage(string message)
     {
         SendMessage(new AutomaTalkChatMessage(message, BinaryChannel));
@@ -49,6 +44,7 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
     {
         base.Open();
         RefreshChatLog();
+        _automaTalk?.FocusInput();
     }
 
     private void RefreshChatLog()

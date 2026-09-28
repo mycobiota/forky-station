@@ -42,6 +42,11 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
         }
     }
 
+    public void FocusInput()
+    {
+        ChatInput.GrabKeyboardFocus();
+    }
+
     public void AddLine(string message)
     {
         ChatLog.AddText(message);
