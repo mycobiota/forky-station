@@ -1,0 +1,57 @@
+using Content.Shared._Funkystation.SISTR;
+using Content.Shared._Funkystation.SistrCore;
+using Content.Shared.Chat;
+using Content.Shared.Radio;
+using Content.Shared.Radio.EntitySystems;
+using JetBrains.Annotations;
+using Robust.Client.UserInterface;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+
+namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
+
+[UsedImplicitly]
+public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, Enum uiKey) : SistrProgramBui(owner, uiKey)
+{
+    [Dependency] private SharedChatSystem _chat = null!;
+
+    private static readonly ProtoId<RadioChannelPrototype> BinaryChannel = "Binary";
+
+    public override string Name => "automaTalk";
+
+    private SistrAutomaTalk? _automaTalk;
+
+    public override void CreateControl(out SistrProgramControl control)
+    {
+        _automaTalk = this.CreateDisposableControl<SistrAutomaTalk>();
+        _automaTalk.ExitProgram += OnExit;
+        _automaTalk.SendMessage += OnSendMessage;
+        control = _automaTalk;
+    }
+
+    private void OnSendMessage(string message)
+    {
+        SendMessage(new AutomaTalkChatMessage(message, BinaryChannel));
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        RefreshChatLog();
+    }
+
+    protected override void Open()
+    {
+        base.Open();
+        RefreshChatLog();
+        _automaTalk?.FocusInput();
+    }
+
+    private void RefreshChatLog()
+    {
+        if (EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrCoreComponent))
+        {
+            _automaTalk?.Update(sistrCoreComponent.RadioMessages);
+        }
+    }
+}

@@ -1,62 +1,92 @@
-using Content.Client._Funkystation.Unions.UI;
-using Content.Server._Funkystation.SistrCore;
+using Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 using Content.Shared._Funkystation.SISTRTerminal;
+using JetBrains.Annotations;
 using Robust.Client.UserInterface;
-using Robust.Shared.Utility;
 
 namespace Content.Client._Funkystation.SISTRTerminal;
 
+[UsedImplicitly]
 public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    private SistrTerminalUi? _terminal;
+    [Dependency] private SharedUserInterfaceSystem _ui = null!;
+    [Dependency] private ILogManager _logManager = null!;
+    private ISawmill? _sawmill;
 
-    private Dictionary<string, Action<string[]>> _commands = new ();
+    private SistrTerminalUi? _terminal;
+    private Dictionary<string, (Enum, InterfaceData)> _programs = new();
 
     protected override void Open()
     {
         base.Open();
 
-        // todo: better way of defining commands
-        _commands.Add("clear", ClearTerminal);
-        _commands.Add("echo", EchoCommand);
+        _sawmill = _logManager.GetSawmill("SISTR");
+        if (!EntMan.TryGetComponent<SistrTerminalComponent>(Owner, out var terminalComp))
+        {
+            _sawmill?.Debug($"Failed to get Terminal component for {EntMan.ToPrettyString(Owner)}.");
+            return;
+        }
+
+        _programs = terminalComp.Programs;
 
         _terminal = this.CreateWindow<SistrTerminalUi>();
-        _terminal.CommandEntered += OnCommandEntered;
 
-        if (!EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrComp))
-            return;
-
-        foreach (var message in sistrComp.RadioMessages)
+        _terminal.SistrCommandLine.RunProgram += HandleRunProgram;
+        foreach (var key in _programs.Keys)
         {
-            _terminal.AddLine(message);
+            _terminal.SistrCommandLine.AddProgram(key);
         }
     }
 
-    private void OnCommandEntered(string input)
+    private void HandleRunProgram(string[] args)
     {
-        ParseCommand(input);
+        if (_programs.TryGetValue(args[0], out var p))
+        {
+            var (key, data) = p;
+            RunProgram(key, data);
+        }
+        else
+        {
+            _terminal?.SistrCommandLine.AddLine($"Program {args[0]} not found");
+        }
     }
 
-    private void ParseCommand(string command)
+    private void RunProgram(Enum key, InterfaceData data)
     {
-        var arguments = command.Split(' ');
-        _commands.TryGetValue(arguments[0], out var action);
-        action?.Invoke(arguments[1..]);
+        var localEntity = PlayerManager.LocalEntity;
+        if (localEntity == null || !EntMan.TryGetComponent<UserInterfaceComponent>(Owner, out var uiComp))
+            return;
+
+        if (!_ui.TryOpenUi((Owner, uiComp), key, localEntity.Value, true))
+        {
+            _sawmill?.Debug("Couldn't open UI");
+            return;
+        }
+        if (!_ui.TryGetOpenUi((Owner, uiComp), key, out SistrProgramBui? program))
+        {
+            _sawmill?.Debug("Program was null");
+            return;
+        }
+
+        program.CreateControl(out var control);
+        _terminal?.OpenProgram(ref control);
+        program.ExitProgramBui += HandleExitProgram;
     }
 
-    private void ClearTerminal(string[] args)
+    private void HandleExitProgram(SistrProgramBui program)
     {
-        _terminal?.ClearTerminal();
+        program.Close();
+        _terminal?.OnProgramClosed();
     }
+}
 
-    private void EchoCommand(string[] args)
+public abstract class SistrProgramBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+{
+    public abstract string Name { get; }
+    public Action<SistrProgramBui>? ExitProgramBui;
+    public abstract void CreateControl(out SistrProgramControl control);
+
+    protected virtual void OnExit()
     {
-        var input = string.Join(' ', args);
-        _terminal?.AddLine(input);
+        ExitProgramBui?.Invoke(this);
     }
-    //
-    // private void PrintMessageLog(string[] args)
-    // {
-    //
-    // }
 }

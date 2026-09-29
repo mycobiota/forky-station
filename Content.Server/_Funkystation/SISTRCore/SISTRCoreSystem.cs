@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
+using Content.Server.Chat.Systems;
 using Content.Server.Power.EntitySystems;
-using Content.Shared._Funkystation.SISTRTerminal;
-using Content.Shared.Radio;
+using Content.Server.Radio.EntitySystems;
+using Content.Shared._Funkystation.SISTR;
+using Content.Shared._Funkystation.SistrCore;
 using Content.Shared.Station.Components;
 
 namespace Content.Server._Funkystation.SistrCore;
@@ -12,6 +15,8 @@ namespace Content.Server._Funkystation.SistrCore;
 public sealed partial class SistrCoreSystem : EntitySystem
 {
     [Dependency] private PowerReceiverSystem _power = null!;
+    [Dependency] private RadioSystem _radio = null!;
+    [Dependency] private ChatSystem _chat = null!;
 
     private bool GridHasFunctionalCore(EntityUid grid)
     {
@@ -37,15 +42,17 @@ public sealed partial class SistrCoreSystem : EntitySystem
     }
 
     [SubscribeLocalEvent]
-    private void OnReceiveRadio(Entity<SistrCoreComponent> ent, ref RadioReceiveEvent args)
+    public void OnAutomaTalkChatMessage(Entity<SistrCoreComponent> ent, ref AutomaTalkChatMessage args)
     {
-        if (ent.Owner == args.RadioSource)
-            return;
+        bool shouldCapitalizeTheWordI = (!CultureInfo.CurrentCulture.IsNeutralCulture && CultureInfo.CurrentCulture.Parent.Name == "en")
+                                        || (CultureInfo.CurrentCulture.IsNeutralCulture && CultureInfo.CurrentCulture.Name == "en");
 
-        if (ent.Comp.RadioMessages.Count >= ent.Comp.RadioMessages.Capacity)
-            ent.Comp.RadioMessages.Dequeue();
+        var sanitizedMessage = _chat.SanitizeMessageCapital(
+            _chat.SanitizeMessageReplaceWords(args.Message.Trim()));
 
-        ent.Comp.RadioMessages.Enqueue($"{Name(args.MessageSource)}: {args.Message}");
-        Dirty(ent);
+        if (shouldCapitalizeTheWordI)
+            sanitizedMessage = _chat.SanitizeMessageCapitalizeTheWordI(sanitizedMessage, "i");
+
+        _radio.SendRadioMessage(args.Actor, sanitizedMessage, args.Channel, ent);
     }
 }

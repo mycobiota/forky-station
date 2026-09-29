@@ -30,7 +30,6 @@
         powerLight:
           True: { visible: true }
           False: { visible: false }
-  - type: SistrTerminal
   - type: ActivatableUI
     requiresComplex: true
     singleUser: true
@@ -39,6 +38,19 @@
     interfaces:
       enum.SistrTerminalUiKey.Key:
         type: SistrTerminalBoundUserInterface
+      enum.SistrAutomaTalkKey.Key:
+        type: SistrAutomaTalkBoundUserInterface
+      enum.RadarConsoleUiKey.Key:
+        type: SistrMassScannerBoundUserInterface
+  - type: SistrTerminal
+    programs:
+      automatalk:
+        enum.SistrAutomaTalkKey.Key:
+          type: SistrAutomaTalkBoundUserInterface
+      mass_scanner:
+        enum.RadarConsoleUiKey.Key:
+          type: SistrMassScannerBoundUserInterface
+  - type: RadarConsole
   - type: ApcPowerReceiver
     powerLoad: 1000
   - type: PointLight
