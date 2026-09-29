@@ -66,7 +66,7 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 
         program.CreateControl(out var control);
         _terminal?.OpenProgram(ref control);
-        program.ExitProgram += HandleExitProgram;
+        program.ExitProgramBui += HandleExitProgram;
     }
 
     private void HandleExitProgram(SistrProgramBui program)
@@ -79,11 +79,11 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 public abstract class SistrProgramBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     public abstract string Name { get; }
-    public Action<SistrProgramBui>? ExitProgram;
+    public Action<SistrProgramBui>? ExitProgramBui;
     public abstract void CreateControl(out SistrProgramControl control);
 
     protected virtual void OnExit()
     {
-        ExitProgram?.Invoke(this);
+        ExitProgramBui?.Invoke(this);
     }
 }

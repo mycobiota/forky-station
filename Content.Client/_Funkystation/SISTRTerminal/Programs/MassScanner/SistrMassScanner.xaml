@@ -2,8 +2,12 @@
                           xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs.MassScanner"
                           xmlns:shuttleui="clr-namespace:Content.Client.Shuttles.UI"
                           Orientation="Vertical">
-    <shuttleui:ShuttleNavControl Name="RadarScreen"
-                                 Margin="15"
-                                  />
-    <HistoryLineEdit Name="LineInput"></HistoryLineEdit>
+    <BoxContainer MaxSize="5 5"> <!-- its stupid but this makes it look right? -->
+        <shuttleui:ShuttleNavControl Name="RadarScreen"
+                                     VerticalAlignment="Top"
+                                     VerticalExpand="True"
+                                     HorizontalExpand="True"/>
+    </BoxContainer>
+    <Control VerticalExpand="True"/>
+    <LineEdit Name="LineInput" PlaceHolder="Type 'exit' to exit..."/>
 </programs:SistrMassScanner>
