@@ -21,6 +21,9 @@ public sealed partial class SistrTerminalUi : FancyWindow
 
     public void OnProgramClosed()
     {
+        if (!SistrCommandLine.IsInsideTree)
+            return;
+
         SistrCommandLine.Visible = true;
         SistrCommandLine.FocusInput();
     }

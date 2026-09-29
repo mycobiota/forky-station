@@ -1,13 +1,9 @@
 <programs:SistrMassScanner xmlns="https://spacestation14.io"
-                          xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs.MassScanner"
-                          xmlns:shuttleui="clr-namespace:Content.Client.Shuttles.UI"
-                          Orientation="Vertical">
-    <BoxContainer MaxSize="5 5"> <!-- its stupid but this makes it look right? -->
-        <shuttleui:ShuttleNavControl Name="RadarScreen"
-                                     VerticalAlignment="Top"
-                                     VerticalExpand="True"
-                                     HorizontalExpand="True"/>
+                           xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs.MassScanner"
+                           xmlns:shuttleui="clr-namespace:Content.Client.Shuttles.UI"
+                           Orientation="Vertical">
+    <BoxContainer RectClipContent="True">
+        <shuttleui:ShuttleNavControl Name="RadarScreen"/>
     </BoxContainer>
-    <Control VerticalExpand="True"/>
-    <LineEdit Name="LineInput" PlaceHolder="Type 'exit' to exit..."/>
+    <LineEdit Name="LineInput" PlaceHolder="Type 'exit' to exit..." MinHeight="30" VerticalAlignment="Bottom"/>
 </programs:SistrMassScanner>

@@ -1,7 +1,7 @@
 <programs:SistrAutomaTalk xmlns="https://spacestation14.io"
                           xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk"
                           Orientation="Vertical">
-    <OutputPanel Name="ChatLog" VerticalExpand="True"/>
-    <Label Text="Automatalk"/>
-    <HistoryLineEdit Name="ChatInput"></HistoryLineEdit>
+    <OutputPanel Name="ChatLog" VerticalExpand="True" Margin="5 5 0 0"/>
+    <Label Margin="5 0 0 0" Text="Automatalk"/>
+    <HistoryLineEdit Name="ChatInput" MinHeight="30" VerticalAlignment="Bottom"></HistoryLineEdit>
 </programs:SistrAutomaTalk>

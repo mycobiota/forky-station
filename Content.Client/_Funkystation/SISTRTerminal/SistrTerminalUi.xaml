@@ -4,8 +4,11 @@
                       Title="SIS/TR Terminal"
                       Name="SisTerminal"
                       Resizable="False"
-                      SetSize="600 400"> <!-- todo: use loc strings -->
-    <PanelContainer Name="InternalWindow">
+                      SetSize="650 450"> <!-- todo: use loc strings -->
+    <PanelContainer StyleIdentifier="SistrMarginBorder" HorizontalExpand="True" VerticalExpand="True" ReservesSpace="False">
+        <Label Margin="0 10 25 0" Text="NT SIS/TR v3.20" StyleIdentifier="SistrMarginLabel" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+    </PanelContainer>
+    <PanelContainer Name="InternalWindow" Margin="25" StyleIdentifier="SistrTerminalPanel">
         <programs:SistrCommandLine Name="SistrCommandLine" Access="Public"/>
     </PanelContainer>
 
