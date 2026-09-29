@@ -1,4 +1,4 @@
-using Content.Shared._Funkystation.SistrCore;
+using Content.Shared._Funkystation.SistrCore.Components;
 using Content.Shared._Funkystation.SISTRTerminal;
 using Content.Shared.Radio;
 

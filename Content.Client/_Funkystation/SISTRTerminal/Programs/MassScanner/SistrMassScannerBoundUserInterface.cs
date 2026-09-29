@@ -1,5 +1,4 @@
 using Content.Shared.Shuttles.BUIStates;
-using Content.Shared.Shuttles.Components;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
@@ -9,8 +8,6 @@ namespace Content.Client._Funkystation.SISTRTerminal.Programs.MassScanner;
 public sealed class SistrMassScannerBoundUserInterface(EntityUid owner, Enum uiKey) : SistrProgramBui(owner, uiKey)
 {
     private SistrMassScanner? _massScanner;
-
-    public override string Name => "massScanner";
 
     public override void CreateControl(out SistrProgramControl control)
     {

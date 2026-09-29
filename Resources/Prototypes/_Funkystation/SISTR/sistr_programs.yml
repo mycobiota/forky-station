@@ -1,0 +1,11 @@
+- type: sistrProgram
+  id: AutomaTalk
+  name: automatalk
+  key: enum.SistrAutomaTalkKey.Key
+  description: AutomatalkDescriptionPlaceholder
+
+- type: sistrProgram
+  id: SistrMassScanner
+  name: mass_scanner
+  key: enum.RadarConsoleUiKey.Key
+  description: SistrMassScannerDescriptionPlaceholder

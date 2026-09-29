@@ -1,7 +1,8 @@
-using Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
-using Content.Shared._Funkystation.SISTRTerminal;
+using Content.Shared._Funkystation.SISTR.Prototypes;
+using Content.Shared._Funkystation.SISTRTerminal.Components;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._Funkystation.SISTRTerminal;
 
@@ -10,10 +11,11 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 {
     [Dependency] private SharedUserInterfaceSystem _ui = null!;
     [Dependency] private ILogManager _logManager = null!;
+    [Dependency] private IPrototypeManager _protoMan = null!;
     private ISawmill? _sawmill;
 
     private SistrTerminalUi? _terminal;
-    private Dictionary<string, (Enum, InterfaceData)> _programs = new();
+    private List<SistrProgramPrototype> _programs = new();
 
     protected override void Open()
     {
@@ -26,31 +28,33 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
             return;
         }
 
-        _programs = terminalComp.Programs;
-
         _terminal = this.CreateWindow<SistrTerminalUi>();
-
         _terminal.SistrCommandLine.RunProgram += HandleRunProgram;
-        foreach (var key in _programs.Keys)
+
+        foreach (var protoId in terminalComp.Programs)
         {
-            _terminal.SistrCommandLine.AddProgram(key);
+            if (!_protoMan.TryIndex(protoId, out var program))
+            {
+                _sawmill?.Debug($"Terminal component for {EntMan.ToPrettyString(Owner)} had a non-existent program protoID {protoId}.");
+                continue;
+            }
+            _programs.Add(program);
+            _terminal.SistrCommandLine.RegisterProgram(program.Name);
         }
     }
 
     private void HandleRunProgram(string[] args)
     {
-        if (_programs.TryGetValue(args[0], out var p))
-        {
-            var (key, data) = p;
-            RunProgram(key, data);
-        }
-        else
+        var program = _programs.Find(p => string.Equals(p.Name, args[0], StringComparison.OrdinalIgnoreCase));
+        if (program == null)
         {
             _terminal?.SistrCommandLine.AddLine($"Program {args[0]} not found");
+            return;
         }
+        RunProgram(program.Key);
     }
 
-    private void RunProgram(Enum key, InterfaceData data)
+    private void RunProgram(Enum key)
     {
         var localEntity = PlayerManager.LocalEntity;
         if (localEntity == null || !EntMan.TryGetComponent<UserInterfaceComponent>(Owner, out var uiComp))
@@ -81,7 +85,6 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
 
 public abstract class SistrProgramBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    public abstract string Name { get; }
     public Action<SistrProgramBui>? ExitProgramBui;
     public abstract void CreateControl(out SistrProgramControl control);
 

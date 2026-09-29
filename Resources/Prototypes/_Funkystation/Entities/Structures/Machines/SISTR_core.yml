@@ -1,5 +1,5 @@
 ﻿- type: entity
-  parent: [ BaseMachinePowered, BaseStructureHealth ]
+  parent: [ BaseMachinePowered, BaseStructureHealth, BaseSistrTerminal ]
   id: SistrCore
   name: SIS/TR v3.20 core
   description: The station's Station Infrastructure Support/Telemetry Regulator core. A basic, non-sapient system that monitors station conditions and reports on them.
@@ -30,26 +30,6 @@
         powerLight:
           True: { visible: true }
           False: { visible: false }
-  - type: ActivatableUI
-    requiresComplex: true
-    singleUser: true
-    key: enum.SistrTerminalUiKey.Key
-  - type: UserInterface
-    interfaces:
-      enum.SistrTerminalUiKey.Key:
-        type: SistrTerminalBoundUserInterface
-      enum.SistrAutomaTalkKey.Key:
-        type: SistrAutomaTalkBoundUserInterface
-      enum.RadarConsoleUiKey.Key:
-        type: SistrMassScannerBoundUserInterface
-  - type: SistrTerminal
-    programs:
-      automatalk:
-        enum.SistrAutomaTalkKey.Key:
-          type: SistrAutomaTalkBoundUserInterface
-      mass_scanner:
-        enum.RadarConsoleUiKey.Key:
-          type: SistrMassScannerBoundUserInterface
   - type: RadarConsole
   - type: ApcPowerReceiver
     powerLoad: 1000
@@ -145,3 +125,26 @@
             max: 15
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+
+- type: entity
+  id: BaseSistrTerminal
+  abstract: true
+  name: SIS/TR Terminal
+  components:
+  - type: SistrTerminal
+    programs:
+    - AutomaTalk
+    - SistrMassScanner
+  - type: ActivatableUI
+    requiresComplex: true
+    singleUser: true
+    key: enum.SistrTerminalUiKey.Key
+  - type: ActivatableUIRequiresPower # todo: shit crashes lol
+  - type: UserInterface
+    interfaces:
+      enum.SistrTerminalUiKey.Key:
+        type: SistrTerminalBoundUserInterface
+      enum.SistrAutomaTalkKey.Key:
+        type: SistrAutomaTalkBoundUserInterface
+      enum.RadarConsoleUiKey.Key:
+        type: SistrMassScannerBoundUserInterface

@@ -4,7 +4,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._Funkystation.SISTR;
-using Content.Shared._Funkystation.SistrCore;
+using Content.Shared._Funkystation.SistrCore.Components;
 using Content.Shared.Station.Components;
 
 namespace Content.Server._Funkystation.SistrCore;

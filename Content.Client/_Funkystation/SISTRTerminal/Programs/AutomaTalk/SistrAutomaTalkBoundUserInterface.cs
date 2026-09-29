@@ -1,12 +1,10 @@
 using Content.Shared._Funkystation.SISTR;
-using Content.Shared._Funkystation.SistrCore;
+using Content.Shared._Funkystation.SistrCore.Components;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
-using Content.Shared.Radio.EntitySystems;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 
 namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 
@@ -16,8 +14,6 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
     [Dependency] private SharedChatSystem _chat = null!;
 
     private static readonly ProtoId<RadioChannelPrototype> BinaryChannel = "Binary";
-
-    public override string Name => "automaTalk";
 
     private SistrAutomaTalk? _automaTalk;
 

@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.GameStates;
 
-namespace Content.Shared._Funkystation.SistrCore;
+namespace Content.Shared._Funkystation.SistrCore.Components;
 
 // funky. marks the sis/tr core
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
