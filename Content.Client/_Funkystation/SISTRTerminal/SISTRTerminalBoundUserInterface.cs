@@ -31,7 +31,10 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
         _terminal = this.CreateWindow<SistrTerminalUi>();
 
         _terminal.SistrCommandLine.RunProgram += HandleRunProgram;
-
+        foreach (var key in _programs.Keys)
+        {
+            _terminal.SistrCommandLine.AddProgram(key);
+        }
     }
 
     private void HandleRunProgram(string[] args)
@@ -53,7 +56,7 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
         if (localEntity == null || !EntMan.TryGetComponent<UserInterfaceComponent>(Owner, out var uiComp))
             return;
 
-        if (!_ui.TryOpenUi((Owner, uiComp), key, localEntity.Value, true)) // the issue is that youre trying to do this without telling the server
+        if (!_ui.TryOpenUi((Owner, uiComp), key, localEntity.Value, true))
         {
             _sawmill?.Debug("Couldn't open UI");
             return;

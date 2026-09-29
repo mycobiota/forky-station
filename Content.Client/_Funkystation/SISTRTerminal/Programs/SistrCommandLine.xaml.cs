@@ -26,9 +26,8 @@ public sealed partial class SistrCommandLine : BoxContainer
         };
 
         // todo: better way of defining commands?
-        _commands.Add("clear", ClearTerminalCommand);
-        _commands.Add("echo", EchoCommand);
-        _commands.Add("run", RunProgramCommand);
+        AddCommand("clear", ClearTerminalCommand);
+        AddCommand("echo", EchoCommand);
     }
 
     private void ParseCommand(string command)
@@ -37,7 +36,7 @@ public sealed partial class SistrCommandLine : BoxContainer
         if (!_commands.TryGetValue(arguments[0], out var action))
             AddLine("No such command or program exists.");
         else
-            action.Invoke(arguments[1..]);
+            action.Invoke(arguments);
     }
 
     private void RunProgramCommand(string[] args)
@@ -52,8 +51,18 @@ public sealed partial class SistrCommandLine : BoxContainer
 
     private void EchoCommand(string[] args)
     {
-        var input = string.Join(' ', args);
+        var input = string.Join(' ', args[1..]);
         AddLine(input);
+    }
+
+    public void AddCommand(string command, Action<string[]> action)
+    {
+        _commands.Add(command, action);
+    }
+
+    public void AddProgram(string program)
+    {
+        AddCommand(program, RunProgramCommand);
     }
 
     public void AddLine(string message)

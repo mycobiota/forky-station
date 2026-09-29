@@ -4,7 +4,7 @@
                       Title="SIS/TR Terminal"
                       Name="SisTerminal"
                       Resizable="False"
-                      SetSize="600 600"> <!-- todo: use loc strings -->
+                      SetSize="600 400"> <!-- todo: use loc strings -->
     <PanelContainer Name="InternalWindow">
         <programs:SistrCommandLine Name="SistrCommandLine" Access="Public"/>
     </PanelContainer>
