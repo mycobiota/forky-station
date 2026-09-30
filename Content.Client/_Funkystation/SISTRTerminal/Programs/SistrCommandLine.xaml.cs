@@ -13,6 +13,9 @@ public sealed partial class SistrCommandLine : BoxContainer
     // todo: better way of defining commands
     private readonly Dictionary<string, Action<string[]>> _commands = new ();
 
+    // todo: loc string for this
+    private const string StartMessage = "SIS/TR v3.20 Terminal\nAccess without authorization is STRICTLY PROHIBITED\nand may lead to disciplinary action.";
+
     public SistrCommandLine()
     {
         RobustXamlLoader.Load(this);
@@ -21,37 +24,24 @@ public sealed partial class SistrCommandLine : BoxContainer
         {
             TerminalLineInput.Clear();
             AddLine($"> {args.Text}");
-            ParseCommand(args.Text);
+            ParseCommandInput(args.Text);
         };
 
         // todo: better way of defining commands?
         AddCommand("clear", ClearTerminalCommand);
         AddCommand("echo", EchoCommand);
+        AddCommand("help", HelpCommand);
+
+        AddLine(StartMessage);
     }
 
-    private void ParseCommand(string command)
+    private void ParseCommandInput(string command)
     {
         var arguments = command.Split(' ');
         if (!_commands.TryGetValue(arguments[0], out var action))
             AddLine("No such command or program exists.");
         else
             action.Invoke(arguments);
-    }
-
-    private void RunProgramCommand(string[] args)
-    {
-        RunProgram?.Invoke(args);
-    }
-
-    private void ClearTerminalCommand(string[] args)
-    {
-        TerminalOutput.Clear();
-    }
-
-    private void EchoCommand(string[] args)
-    {
-        var input = string.Join(' ', args[1..]);
-        AddLine(input);
     }
 
     public void AddCommand(string command, Action<string[]> action)
@@ -77,5 +67,31 @@ public sealed partial class SistrCommandLine : BoxContainer
     public void FocusInput()
     {
         TerminalLineInput.GrabKeyboardFocus();
+    }
+
+    // todo: loc strings and descriptions and stuff
+    private void HelpCommand(string[] args)
+    {
+        AddLine("Available commands:");
+        foreach (var command in _commands.Keys)
+        {
+            AddLine(command);
+        }
+    }
+
+    private void RunProgramCommand(string[] args)
+    {
+        RunProgram?.Invoke(args);
+    }
+
+    private void ClearTerminalCommand(string[] args)
+    {
+        TerminalOutput.Clear();
+    }
+
+    private void EchoCommand(string[] args)
+    {
+        var input = string.Join(' ', args[1..]);
+        AddLine(input);
     }
 }

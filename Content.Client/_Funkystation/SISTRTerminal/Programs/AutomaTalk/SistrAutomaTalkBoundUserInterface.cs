@@ -15,6 +15,9 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
 
     private static readonly ProtoId<RadioChannelPrototype> BinaryChannel = "Binary";
 
+    // todo: loc string for this
+    private const string StartMessage = "AutomaTalk ver.0.09.1\nType \"/exit\" to exit.";
+
     private SistrAutomaTalk? _automaTalk;
 
     public override void CreateControl(out SistrProgramControl control)
@@ -41,6 +44,7 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
         base.Open();
         RefreshChatLog();
         _automaTalk?.FocusInput();
+        _automaTalk?.AddLine(StartMessage);
     }
 
     private void RefreshChatLog()

@@ -33,6 +33,7 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
         SendMessage?.Invoke(input);
     }
 
+    // todo: maybe update the chat log in a better way than just resetting it every time
     public void Update<T>(T messages) where T : IEnumerable<string>
     {
         ChatLog.Clear();
