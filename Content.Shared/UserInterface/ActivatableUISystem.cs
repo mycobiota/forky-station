@@ -274,8 +274,17 @@ public sealed partial class ActivatableUISystem : EntitySystem
         RaiseLocalEvent(uid, new ActivatableUIPlayerChangedEvent());
     }
 
-    public void CloseAll(EntityUid uid, ActivatableUIComponent? aui = null)
+    // funky - add option to close every ui
+    public void CloseAll(EntityUid uid, ActivatableUIComponent? aui = null, bool closeAllUis = false)
     {
+        // funky start
+        if (closeAllUis)
+        {
+            _uiSystem.CloseUis(uid);
+            return;
+        }
+        // funky end
+
         if (!Resolve(uid, ref aui, false))
             return;
 

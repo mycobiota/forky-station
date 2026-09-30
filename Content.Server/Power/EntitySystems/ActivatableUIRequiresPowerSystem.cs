@@ -13,6 +13,6 @@ public sealed partial class ActivatableUIRequiresPowerSystem : SharedActivatable
     private void OnPowerChanged(EntityUid uid, ActivatableUIRequiresPowerComponent component, ref PowerChangedEvent args)
     {
         if (!args.Powered)
-            _activatableUI.CloseAll(uid);
+            _activatableUI.CloseAll(uid, closeAllUis: component.HasAdditionalInterfaces); // funky
     }
 }

@@ -139,7 +139,8 @@
     requiresComplex: true
     singleUser: true
     key: enum.SistrTerminalUiKey.Key
-  - type: ActivatableUIRequiresPower # todo: shit crashes lol
+  - type: ActivatableUIRequiresPower
+    hasAdditionalInterfaces: true
   - type: UserInterface
     interfaces:
       enum.SistrTerminalUiKey.Key:
