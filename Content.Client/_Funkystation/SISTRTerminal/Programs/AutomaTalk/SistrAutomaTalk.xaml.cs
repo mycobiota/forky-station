@@ -10,6 +10,7 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
 {
     public Action<string>? SendMessage;
     private const string ExitCommand = "/exit";
+    private static readonly Color TextColor = Color.FromHex("#51b0d5");
 
     private static readonly FormattedMessage EndOfLogMessage =
         FormattedMessage.FromUnformatted(
@@ -70,6 +71,6 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
 
     public void AddText(string message)
     {
-        ChatLog.AddText(message);
+        ChatLog.AddMessage(FormattedMessage.FromUnformatted(message), TextColor);
     }
 }

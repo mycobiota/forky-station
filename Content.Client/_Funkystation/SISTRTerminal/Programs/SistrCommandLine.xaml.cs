@@ -34,6 +34,12 @@ public sealed partial class SistrCommandLine : BoxContainer
 
     private void ParseCommandInput(string commandInput)
     {
+        if (string.IsNullOrWhiteSpace(commandInput))
+        {
+            AddLine(Loc.GetString("sistr-terminal-invalid-command"));
+            return;
+        }
+
         var arguments = commandInput.Split(' ');
         if (!_commands.TryGetValue(arguments[0], out var command))
             AddLine(Loc.GetString("sistr-terminal-invalid-command"));
@@ -70,7 +76,7 @@ public sealed partial class SistrCommandLine : BoxContainer
     {
         if (args.Length <= 1)
         {
-            AddLine(Loc.GetString("sistr-terminal-help-command-start"));
+            AddLine(Loc.GetString("sistr-terminal-help-command-start")+"\n");
             foreach (var command in _commands)
             {
                 AddLine(Loc.GetString("sistr-terminal-help-command-wrap",

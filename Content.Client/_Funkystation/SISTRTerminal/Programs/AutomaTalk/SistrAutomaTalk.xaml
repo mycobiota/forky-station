@@ -2,6 +2,6 @@
                           xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk"
                           Orientation="Vertical">
     <OutputPanel Name="ChatLog" VerticalExpand="True" Margin="5 5 0 0" StyleIdentifier="CommandLineOutput"/>
-    <Label Margin="5 0 0 0" Text="{Loc 'automatalk-label'}" StyleIdentifier="CommandLineOutput"/>
+    <Label Margin="5 0 0 0" Text="{Loc 'automatalk-label'}" StyleClasses="ConsoleText"/>
     <HistoryLineEdit Name="ChatInput" MinHeight="30" VerticalAlignment="Bottom"/>
 </programs:SistrAutomaTalk>
