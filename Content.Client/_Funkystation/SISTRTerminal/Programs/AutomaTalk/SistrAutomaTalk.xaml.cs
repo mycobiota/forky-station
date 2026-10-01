@@ -7,6 +7,7 @@ namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 public sealed partial class SistrAutomaTalk : SistrProgramControl
 {
     public Action<string>? SendMessage;
+    private const string ExitCommand = "/exit";
 
     public SistrAutomaTalk()
     {
@@ -24,7 +25,7 @@ public sealed partial class SistrAutomaTalk : SistrProgramControl
         if (string.IsNullOrEmpty(input))
             return;
 
-        if (input.StartsWith("/exit"))
+        if (input.StartsWith(ExitCommand))
         {
             Exit();
             return;

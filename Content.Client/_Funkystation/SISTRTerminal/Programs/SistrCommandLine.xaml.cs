@@ -10,11 +10,7 @@ public sealed partial class SistrCommandLine : BoxContainer
 {
     public Action<string[]>? RunProgram;
 
-    // todo: better way of defining commands
-    private readonly Dictionary<string, Action<string[]>> _commands = new ();
-
-    // todo: loc string for this
-    private const string StartMessage = "SIS/TR v3.20 Terminal\nAccess without authorization is STRICTLY PROHIBITED\nand may lead to disciplinary action.";
+    private readonly Dictionary<string, CommandEntry> _commands = new ();
 
     public SistrCommandLine()
     {
@@ -28,30 +24,28 @@ public sealed partial class SistrCommandLine : BoxContainer
         };
 
         // todo: better way of defining commands?
-        AddCommand("clear", ClearTerminalCommand);
-        AddCommand("echo", EchoCommand);
-        AddCommand("help", HelpCommand);
-
-        AddLine(StartMessage);
+        AddCommand("clear", Loc.GetString("sistr-terminal-clear-command-description"), ClearTerminalCommand);
+        AddCommand("echo", Loc.GetString("sistr-terminal-echo-command-description"), EchoCommand);
+        AddCommand("help", Loc.GetString("sistr-terminal-help-command-description"), HelpCommand);
     }
 
-    private void ParseCommandInput(string command)
+    private void ParseCommandInput(string commandInput)
     {
-        var arguments = command.Split(' ');
-        if (!_commands.TryGetValue(arguments[0], out var action))
-            AddLine("No such command or program exists.");
+        var arguments = commandInput.Split(' ');
+        if (!_commands.TryGetValue(arguments[0], out var command))
+            AddLine(Loc.GetString("sistr-terminal-invalid-command"));
         else
-            action.Invoke(arguments);
+            command.Action.Invoke(arguments);
     }
 
-    public void AddCommand(string command, Action<string[]> action)
+    public void AddCommand(string command, string description, Action<string[]> action)
     {
-        _commands.Add(command, action);
+        _commands.Add(command, new CommandEntry(description, action));
     }
 
-    public void RegisterProgram(string program)
+    public void RegisterProgram(string program, string description)
     {
-        AddCommand(program, RunProgramCommand);
+        AddCommand(program, description, RunProgramCommand);
     }
 
     public void AddLine(string message)
@@ -69,13 +63,27 @@ public sealed partial class SistrCommandLine : BoxContainer
         TerminalLineInput.GrabKeyboardFocus();
     }
 
-    // todo: loc strings and descriptions and stuff
     private void HelpCommand(string[] args)
     {
-        AddLine("Available commands:");
-        foreach (var command in _commands.Keys)
+        if (args.Length <= 1)
         {
-            AddLine(command);
+            AddLine(Loc.GetString("sistr-terminal-help-command-start"));
+            foreach (var command in _commands)
+            {
+                AddLine(Loc.GetString("sistr-terminal-help-command-wrap",
+                    ("name", command.Key),
+                    ("description", command.Value.Description)));
+            }
+        }
+        else if (_commands.TryGetValue(args[1].ToLower(), out var command))
+        {
+            AddLine(Loc.GetString("sistr-terminal-help-command-wrap",
+                ("name", args[1].ToLower()),
+                ("description", command.Description)));
+        }
+        else
+        {
+            AddLine(Loc.GetString("sistr-terminal-invalid-command"));
         }
     }
 
@@ -93,5 +101,11 @@ public sealed partial class SistrCommandLine : BoxContainer
     {
         var input = string.Join(' ', args[1..]);
         AddLine(input);
+    }
+
+    private struct CommandEntry(string description, Action<string[]> action)
+    {
+        public readonly string Description = description;
+        public readonly Action<string[]> Action = action;
     }
 }

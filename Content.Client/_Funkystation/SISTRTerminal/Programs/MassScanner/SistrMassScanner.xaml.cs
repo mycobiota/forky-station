@@ -7,6 +7,8 @@ namespace Content.Client._Funkystation.SISTRTerminal.Programs.MassScanner;
 [GenerateTypedNameReferences]
 public sealed partial class SistrMassScanner : SistrProgramControl
 {
+    private const string ExitCommand = "exit";
+
     public void UpdateState(NavInterfaceState scc)
     {
         RadarScreen.UpdateState(scc);
@@ -17,7 +19,7 @@ public sealed partial class SistrMassScanner : SistrProgramControl
         RobustXamlLoader.Load(this);
         LineInput.OnTextEntered += args =>
         {
-            if (args.Text == "exit")
+            if (args.Text == ExitCommand)
                 ExitProgram?.Invoke();
         };
     }

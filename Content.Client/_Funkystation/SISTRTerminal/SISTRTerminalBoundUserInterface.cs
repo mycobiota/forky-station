@@ -3,6 +3,7 @@ using Content.Shared._Funkystation.SISTRTerminal.Components;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client._Funkystation.SISTRTerminal;
 
@@ -39,8 +40,12 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
                 continue;
             }
             _programs.Add(program);
-            _terminal.SistrCommandLine.RegisterProgram(program.Name);
+            _terminal.SistrCommandLine.RegisterProgram(program.Name, Loc.GetString(program.LocalizedDescription));
         }
+
+        _terminal.SistrCommandLine.AddLineFormatted(
+            FormattedMessage.FromMarkupOrThrow(
+                Loc.GetString(terminalComp.StartupMessage)));
     }
 
     private void HandleRunProgram(string[] args)

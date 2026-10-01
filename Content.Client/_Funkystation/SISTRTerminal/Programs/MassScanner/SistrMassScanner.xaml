@@ -5,5 +5,5 @@
     <BoxContainer RectClipContent="True">
         <shuttleui:ShuttleNavControl Name="RadarScreen"/>
     </BoxContainer>
-    <LineEdit Name="LineInput" PlaceHolder="Type 'exit' to exit..." MinHeight="30" VerticalAlignment="Bottom"/>
+    <LineEdit Name="LineInput" PlaceHolder="{Loc 'sistr-mass-scanner-exit-prompt'}" MinHeight="30" VerticalAlignment="Bottom"/>
 </programs:SistrMassScanner>

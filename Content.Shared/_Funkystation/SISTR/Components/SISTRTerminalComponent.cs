@@ -6,6 +6,9 @@ namespace Content.Shared._Funkystation.SISTRTerminal.Components;
 [RegisterComponent]
 public sealed partial class SistrTerminalComponent : Component
 {
+    [DataField]
+    public LocId StartupMessage;
+
     [DataField, AlwaysPushInheritance]
     public List<ProtoId<SistrProgramPrototype>> Programs;
 }

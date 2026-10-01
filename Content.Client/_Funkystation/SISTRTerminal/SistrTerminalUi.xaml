@@ -1,12 +1,12 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:programs="clr-namespace:Content.Client._Funkystation.SISTRTerminal.Programs"
-                      Title="SIS/TR Terminal"
+                      Title="{Loc 'sistr-terminal-window-title'}"
                       Name="SisTerminal"
                       Resizable="False"
-                      SetSize="650 450"> <!-- todo: use loc strings -->
+                      SetSize="650 450">
     <PanelContainer StyleIdentifier="SistrMarginBorder" HorizontalExpand="True" VerticalExpand="True" ReservesSpace="False">
-        <Label Margin="0 10 25 0" Text="NT SIS/TR v3.20" StyleIdentifier="SistrMarginLabel" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <Label Margin="0 10 25 0" Text="{Loc 'sistr-terminal-margin-label'}" StyleIdentifier="SistrMarginLabel" VerticalAlignment="Top" HorizontalAlignment="Right"/>
     </PanelContainer>
     <PanelContainer Name="InternalWindow" Margin="25" StyleIdentifier="SistrTerminalPanel">
         <programs:SistrCommandLine Name="SistrCommandLine" Access="Public"/>

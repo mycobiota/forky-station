@@ -2,10 +2,10 @@
   id: AutomaTalk
   name: automatalk
   key: enum.SistrAutomaTalkKey.Key
-  description: AutomatalkDescriptionPlaceholder
+  description: automatalk-description
 
 - type: sistrProgram
   id: SistrMassScanner
   name: mass_scanner
   key: enum.RadarConsoleUiKey.Key
-  description: SistrMassScannerDescriptionPlaceholder
+  description: sistr-mass-scanner-description

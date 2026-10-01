@@ -15,6 +15,8 @@ public sealed class SistrTerminalSheetlet : Sheetlet<NanotrasenStylesheet>
 {
     public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
     {
+        var robotoMono11 = ResCache.GetFont("/Fonts/RobotoMono/RobotoMono-Regular.ttf", size: 11);
+
         var internalPanel = new StyleBoxFlat
         {
             BackgroundColor = Color.FromHex("#486859"),
@@ -38,6 +40,9 @@ public sealed class SistrTerminalSheetlet : Sheetlet<NanotrasenStylesheet>
                 .Identifier("SistrMarginLabel")
                 .Font(sheet.BaseFont.GetFont(8))
                 .FontColor(Color.FromHex("#2b2322")),
+            E<OutputPanel>()
+                .Identifier("CommandLineOutput")
+                .Prop(Label.StylePropertyFont, robotoMono11),
         ];
     }
 }
