@@ -13,6 +13,7 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
     [Dependency] private SharedUserInterfaceSystem _ui = null!;
     [Dependency] private ILogManager _logManager = null!;
     [Dependency] private IPrototypeManager _protoMan = null!;
+    [Dependency] private ILocalizationManager _loc = null!;
     private ISawmill? _sawmill;
 
     private SistrTerminalUi? _terminal;
@@ -40,12 +41,12 @@ public sealed partial class SistrTerminalBoundUserInterface(EntityUid owner, Enu
                 continue;
             }
             _programs.Add(program);
-            _terminal.SistrCommandLine.RegisterProgram(program.Name, Loc.GetString(program.LocalizedDescription));
+            _terminal.SistrCommandLine.RegisterProgram(program.Name, _loc.GetString(program.LocalizedDescription));
         }
 
         _terminal.SistrCommandLine.AddLineFormatted(
             FormattedMessage.FromMarkupOrThrow(
-                Loc.GetString(terminalComp.StartupMessage)));
+                _loc.GetString(terminalComp.StartupMessage)));
     }
 
     private void HandleRunProgram(string[] args)

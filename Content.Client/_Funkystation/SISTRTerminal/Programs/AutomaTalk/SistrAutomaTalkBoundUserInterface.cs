@@ -11,9 +11,11 @@ namespace Content.Client._Funkystation.SISTRTerminal.Programs.AutomaTalk;
 [UsedImplicitly]
 public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, Enum uiKey) : SistrProgramBui(owner, uiKey)
 {
-    [Dependency] private SharedChatSystem _chat = null!;
-
     private static readonly ProtoId<RadioChannelPrototype> BinaryChannel = "Binary";
+
+    private static readonly string StartMessage =
+        Loc.GetString("automatalk-start-message",
+            ("capacity", SharedSistrCoreSystem.AutomaTalkHistoryLength));
 
     private SistrAutomaTalk? _automaTalk;
 
@@ -30,10 +32,12 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
         SendMessage(new AutomaTalkChatMessage(message, BinaryChannel));
     }
 
-    public override void Update()
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
     {
-        base.Update();
-        RefreshChatLog();
+        if (message is not AutomaTalkChatMessage automaTalkMsg)
+            return;
+
+        _automaTalk?.UpdateOnMessageReceived(automaTalkMsg.Message);
     }
 
     protected override void Open()
@@ -41,14 +45,14 @@ public sealed partial class SistrAutomaTalkBoundUserInterface(EntityUid owner, E
         base.Open();
         RefreshChatLog();
         _automaTalk?.FocusInput();
-        _automaTalk?.AddLine(Loc.GetString("automatalk-start-message"));
+        _automaTalk?.AddText(StartMessage);
     }
 
     private void RefreshChatLog()
     {
         if (EntMan.TryGetComponent<SistrCoreComponent>(Owner, out var sistrCoreComponent))
         {
-            _automaTalk?.Update(sistrCoreComponent.RadioMessages);
+            _automaTalk?.RefreshChatLog(sistrCoreComponent.RadioMessages);
         }
     }
 }

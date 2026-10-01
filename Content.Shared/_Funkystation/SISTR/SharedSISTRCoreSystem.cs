@@ -8,22 +8,23 @@ public sealed partial class SharedSistrCoreSystem : EntitySystem
 {
     [Dependency] private SharedUserInterfaceSystem _ui = null!;
 
+    public const int AutomaTalkHistoryLength = 15;
+
     [SubscribeLocalEvent]
     private void OnReceiveRadio(Entity<SistrCoreComponent> ent, ref RadioReceiveEvent args)
     {
-        if (ent.Comp.RadioMessages.Count >= ent.Comp.RadioMessages.Capacity)
-            ent.Comp.RadioMessages.Dequeue();
+        var formatted = Loc.GetString("automatalk-wrap-message",
+            ("name", Name(args.MessageSource)),
+            ("message", args.Message));
 
-        ent.Comp.RadioMessages.Enqueue($"{Name(args.MessageSource)}: {args.Message}");
-        Dirty(ent);
-    }
-
-    [SubscribeLocalEvent]
-    public void OnAfterAutoHandleStateEvent(Entity<SistrCoreComponent> ent, ref AfterAutoHandleStateEvent args)
-    {
-        if (_ui.TryGetOpenUi(ent.Owner, SistrAutomaTalkKey.Key, out var bui))
+        while (ent.Comp.RadioMessages.Count >= AutomaTalkHistoryLength)
         {
-            bui.Update();
+            ent.Comp.RadioMessages.Dequeue();
         }
+
+        ent.Comp.RadioMessages.Enqueue(formatted);
+        Dirty(ent);
+
+        _ui.ServerSendUiMessage(ent.Owner, SistrAutomaTalkKey.Key, new AutomaTalkChatMessage(formatted, args.Channel.ID));
     }
 }
