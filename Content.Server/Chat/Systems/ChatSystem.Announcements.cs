@@ -16,39 +16,29 @@ public sealed partial class ChatSystem
 
     [Dependency] private PASystem _paSystem = null!; // funky - announcements via PA speakers
     /// <inheritdoc />
-    public override void DispatchGlobalAnnouncement(
-        string message,
-        string? sender = null,
-        bool playSound = true,
-        SoundSpecifier? announcementSound = null,
-        Color? colorOverride = null,
-        bool paSystemBypass = false // funky
-        )
+    public override void DispatchGlobalAnnouncement(Announcement announcement)
     {
-        sender ??= Loc.GetString("chat-manager-sender-announcement");
+        announcement.SenderName ??= Loc.GetString("chat-manager-sender-announcement");
 
         // funky - redirect announcement to PA speakers
-        if (!paSystemBypass && _configurationManager.GetCVar(PAAnnouncementCVars.PAEnabled))
+        if (!announcement.BypassPASystem && _configurationManager.GetCVar(PAAnnouncementCVars.PAEnabled))
         {
             var paExclusive = _configurationManager.GetCVar(PAAnnouncementCVars.PAExclusiveAnnouncements);
+
             _paSystem.DispatchPAAnnouncement(
-                message,
-                sender,
-                source: null,
+                announcement with { ShouldPlaySound = announcement.ShouldPlaySound && paExclusive }, // we don't want to double up on announcement sounds being played globally and through the PA speakers
                 preamble: false,
-                playSound: playSound && paExclusive, // we don't want to double up on announcement sounds being played globally and through the PA speakers
-                global: true,
-                customPreamble: null,
-                announcementSound,
-                colorOverride);
+                global: true);
+
             if (paExclusive)
                 return;
         }
 
-        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
-        _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
-        if (playSound)
+        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", announcement.SenderName), ("message", FormattedMessage.EscapeText(announcement.Message)));
+        _chatManager.ChatMessageToAll(ChatChannel.Radio, announcement.Message, wrappedMessage, default, false, true, announcement.ColorOverride);
+        if (announcement.ShouldPlaySound)
         {
+            var announcementSound = announcement.AltAnnouncementSound;
             // Macrocosm edit start - announcer variation
             if (announcementSound == null)
             {
@@ -57,111 +47,87 @@ public sealed partial class ChatSystem
             _audio.PlayGlobal(announcementSound, Filter.Broadcast(), true, AudioParams.Default.WithVolume(-2f));
             // Macrocosm edit end
         }
-        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Global station announcement from {sender}: {message}");
+        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Global station announcement from {announcement.SenderName}: {announcement.Message}");
     }
 
     /// <inheritdoc />
-    public override void DispatchFilteredAnnouncement(
-        Filter filter,
-        string message,
-        EntityUid? source = null,
-        string? sender = null,
-        bool playSound = true,
-        SoundSpecifier? announcementSound = null,
-        Color? colorOverride = null,
-        bool paSystemBypass = false) //funky
+    public override void DispatchFilteredAnnouncement(Filter filter, Announcement announcement) //funky
     {
-        sender ??= Loc.GetString("chat-manager-sender-announcement");
+        announcement.SenderName ??= Loc.GetString("chat-manager-sender-announcement");
 
         // funky - redirect announcement to PA speakers
-        if (!paSystemBypass && _configurationManager.GetCVar(PAAnnouncementCVars.PAEnabled))
+        if (!announcement.BypassPASystem && _configurationManager.GetCVar(PAAnnouncementCVars.PAEnabled))
         {
             var paExclusive = _configurationManager.GetCVar(PAAnnouncementCVars.PAExclusiveAnnouncements);
             _paSystem.DispatchPAAnnouncement(
-                message,
-                sender,
-                source,
+                announcement with { ShouldPlaySound = announcement.ShouldPlaySound && paExclusive }, // we don't want to double up on announcement sounds being played globally and through the PA speakers
                 preamble: false,
-                playSound: playSound && paExclusive, // we don't want to double up on announcement sounds being played globally and through the PA speakers
-                global: true,
-                customPreamble: null,
-                announcementSound,
-                colorOverride);
+                global: true);
+
             if (paExclusive)
                 return;
         }
 
-        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
-        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrappedMessage, source ?? default, false, true, colorOverride);
-        if (playSound)
+        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", announcement.SenderName), ("message", FormattedMessage.EscapeText(announcement.Message)));
+        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, announcement.Message, wrappedMessage, announcement.Source ?? default, false, true, announcement.ColorOverride);
+        if (announcement.ShouldPlaySound)
         {
+            var announcementSound = announcement.AltAnnouncementSound;
             // Macrocosm edit start - announcer variation
             if (announcementSound == null)
             {
                 _announcer.TryGetAnnouncerSound(DefaultAnnouncementSound, out announcementSound);
             }
-            _audio.PlayGlobal(announcementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+            _audio.PlayGlobal(announcementSound, Filter.Broadcast(), true, AudioParams.Default.WithVolume(-2f));
             // Macrocosm edit end
         }
-        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement from {sender}: {message}");
+        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement from {announcement.SenderName}: {announcement.Message}");
     }
 
     /// <inheritdoc />
-    public override void DispatchStationAnnouncement(
-        EntityUid source,
-        string message,
-        string? sender = null,
-        bool playDefaultSound = true,
-        SoundSpecifier? announcementSound = null,
-        Color? colorOverride = null,
-        bool paSystemBypass = false) // funky
+    public override void DispatchStationAnnouncement(Announcement announcement, EntityUid? stationUid = null) // funky
     {
-        sender ??= Loc.GetString("chat-manager-sender-announcement");
+        stationUid ??= _stationSystem.GetOwningStation(announcement.Source);
 
-        // funky - redirect announcement to PA speakers
-        if (!paSystemBypass && _configurationManager.GetCVar(PAAnnouncementCVars.PAEnabled))
-        {
-            var paExclusive = _configurationManager.GetCVar(PAAnnouncementCVars.PAExclusiveAnnouncements);
-            _paSystem.DispatchPAAnnouncement(
-                message,
-                sender,
-                source,
-                preamble: false,
-                playSound: playDefaultSound && paExclusive, // we don't want to double up on announcement sounds being played globally and through the PA speakers
-                global: false,
-                customPreamble: null,
-                announcementSound,
-                colorOverride);
-            if (paExclusive)
-                return;
-        }
-
-        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
-        var station = _stationSystem.GetOwningStation(source);
-
-        if (station == null)
+        if (stationUid == null || !TryComp<StationDataComponent>(stationUid, out var stationDataComp))
         {
             // you can't make a station announcement without a station
             return;
         }
 
-        if (!TryComp<StationDataComponent>(station, out var stationDataComp)) return;
+        announcement.SenderName ??= Loc.GetString("chat-manager-sender-announcement");
+
+        // funky - redirect announcement to PA speakers
+        if (!announcement.BypassPASystem && _configurationManager.GetCVar(PAAnnouncementCVars.PAEnabled))
+        {
+            var paExclusive = _configurationManager.GetCVar(PAAnnouncementCVars.PAExclusiveAnnouncements);
+            _paSystem.DispatchPAAnnouncement(
+                announcement with { ShouldPlaySound = announcement.ShouldPlaySound && paExclusive }, // we don't want to double up on announcement sounds being played globally and through the PA speakers
+                preamble: false,
+                global: false,
+                targetStation: (stationUid.Value, stationDataComp));
+
+            if (paExclusive)
+                return;
+        }
+
+        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", announcement.SenderName), ("message", FormattedMessage.EscapeText(announcement.Message)));
 
         var filter = _stationSystem.GetInStation(stationDataComp);
 
-        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrappedMessage, source, false, true, colorOverride);
+        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, announcement.Message, wrappedMessage, announcement.Source ?? default, false, true, announcement.ColorOverride);
 
-        if (playDefaultSound)
+        if (announcement.ShouldPlaySound)
         {
+            var announcementSound = announcement.AltAnnouncementSound;
             // Macrocosm edit start - announcer variation
             if (announcementSound == null)
             {
                 _announcer.TryGetAnnouncerSound(DefaultAnnouncementSound, out announcementSound);
             }
-            _audio.PlayGlobal(announcementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+            _audio.PlayGlobal(announcementSound, Filter.Broadcast(), true, AudioParams.Default.WithVolume(-2f));
             // Macrocosm edit end
         }
-
-        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement on {station} from {sender}: {message}");
+        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement on {ToPrettyString(stationUid)} from {announcement.SenderName}: {announcement.Message}");
     }
 }
