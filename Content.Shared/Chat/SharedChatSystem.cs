@@ -412,7 +412,7 @@ public abstract partial class SharedChatSystem : EntitySystem
     /// If you have PA system exclusive announcements enabled, this doesn't differ from
     /// <see cref="DispatchGlobalAnnouncement"/> at all!
     /// </funky>
-    public virtual void DispatchFilteredAnnouncement(Filter filter, Announcement announcement)
+    public virtual void DispatchFilteredAnnouncement(Announcement announcement, Filter filter)
     { }
 
     /// <summary>

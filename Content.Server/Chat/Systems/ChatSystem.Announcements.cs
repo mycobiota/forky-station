@@ -51,7 +51,7 @@ public sealed partial class ChatSystem
     }
 
     /// <inheritdoc />
-    public override void DispatchFilteredAnnouncement(Filter filter, Announcement announcement) //funky
+    public override void DispatchFilteredAnnouncement(Announcement announcement, Filter filter) //funky
     {
         announcement.SenderName ??= Loc.GetString("chat-manager-sender-announcement");
 
