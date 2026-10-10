@@ -527,7 +527,7 @@ public sealed partial class NuclearReactorSystem : SharedNuclearReactorSystem
         var announcement = Loc.GetString("reactor-meltdown-announcement");
         var sender = Loc.GetString("reactor-meltdown-announcement-sender");
 
-        var toDispatch = new Announcement(
+        var toDispatch = new ChatAnnouncement(
             Message: announcement,
             Source: stationUid ?? uid,
             SenderName: sender,
@@ -702,7 +702,7 @@ public sealed partial class NuclearReactorSystem : SharedNuclearReactorSystem
             // funky - delta_alt.ogg was removed!!! https://github.com/funky-station/forky-station/commit/fd9212c73a68ec23f6668ed1cb8d35b434941de8
             // not sure if there's a suitable replacement available so we just won't play a sound for now
 
-            var toDispatch = new Announcement(
+            var toDispatch = new ChatAnnouncement(
                 Message: announcement,
                 Source: stationUid ?? uid,
                 SenderName: sender,

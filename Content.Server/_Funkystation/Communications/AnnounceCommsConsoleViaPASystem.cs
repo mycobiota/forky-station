@@ -54,7 +54,7 @@ public sealed partial class CommunicationsConsoleSystem
 
         _announcer.TryGetAnnouncerSound(comp.Sound, out var sound);
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message.Message,
             Source: message.Actor,
             SenderName: author,

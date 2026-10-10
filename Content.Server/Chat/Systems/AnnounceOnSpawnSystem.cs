@@ -25,7 +25,7 @@ public sealed partial class AnnounceOnSpawnSystem : EntitySystem
         var message = Loc.GetString(comp.Message);
         var sender = comp.Sender != null ? Loc.GetString(comp.Sender) : Loc.GetString("chat-manager-sender-announcement");
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message,
             SenderName: sender,
             ShouldPlaySound: !comp.GlobalSound, // avoid playing the spooky nar'sie noise through PA speakers, it should be heard globally instead

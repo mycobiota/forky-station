@@ -125,7 +125,7 @@ public sealed partial class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponen
         {
             foreach (var station in _station.GetStations())
             {
-                _chat.DispatchStationAnnouncement(new Announcement(
+                _chat.DispatchStationAnnouncement(new ChatAnnouncement(
                     Message: Loc.GetString("zombie-shuttle-call"),
                     Source: station,
                     ColorOverride: Color.Crimson),

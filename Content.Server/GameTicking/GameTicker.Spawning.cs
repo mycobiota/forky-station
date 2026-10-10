@@ -263,7 +263,7 @@ namespace Content.Server.GameTicking
             {
                 if (jobPrototype.JoinNotifyCrew)
                 {
-                    _chatSystem.DispatchStationAnnouncement(new Announcement(
+                    _chatSystem.DispatchStationAnnouncement(new ChatAnnouncement(
                         Message: Loc.GetString("latejoin-arrival-announcement-special",
                             ("character", MetaData(mob).EntityName),
                             ("entity", mob),
@@ -276,7 +276,7 @@ namespace Content.Server.GameTicking
                 }
                 else
                 {
-                    _chatSystem.DispatchStationAnnouncement(new Announcement(
+                    _chatSystem.DispatchStationAnnouncement(new ChatAnnouncement(
                         Message: Loc.GetString("latejoin-arrival-announcement",
                             ("character", MetaData(mob).EntityName),
                             ("entity", mob),

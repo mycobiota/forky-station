@@ -45,7 +45,7 @@ public sealed partial class CriminalRecordsHackerSystem : SharedCriminalRecordsH
             // main damage with this is existing arrest warrants are lost and to anger beepsky
         }
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: Loc.GetString(ent.Comp.Announcement),
             ShouldPlaySound: true,
             ColorOverride: Color.Red);

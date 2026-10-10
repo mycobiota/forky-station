@@ -51,7 +51,7 @@ namespace Content.Server.Administration.UI
                             break;
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
-                            _chatSystem.DispatchGlobalAnnouncement(new Announcement(
+                            _chatSystem.DispatchGlobalAnnouncement(new ChatAnnouncement(
                                 Message: doAnnounce.Announcement,
                                 SenderName: doAnnounce.Announcer,
                                 ColorOverride: Color.Gold,

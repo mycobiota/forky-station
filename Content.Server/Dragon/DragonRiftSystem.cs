@@ -95,7 +95,7 @@ public sealed partial class DragonRiftSystem : EntitySystem
 
                 // BEGIN Funky
                 _announcer.TryGetAnnouncerSound(AnnounceSound, out var sound); // funky - use announcement sound prototypes
-                _chat.DispatchGlobalAnnouncement(new Announcement(
+                _chat.DispatchGlobalAnnouncement(new ChatAnnouncement(
                     Message: msg,
                     ShouldPlaySound: paExclusive,
                     AltAnnouncementSound: sound,

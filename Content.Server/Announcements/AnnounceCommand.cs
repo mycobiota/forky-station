@@ -83,7 +83,7 @@ public sealed partial class AnnounceCommand : LocalizedEntityCommands
                 sound = new SoundPathSpecifier(soundOverride);
         }
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message,
             SenderName: sender,
             ShouldPlaySound: true,

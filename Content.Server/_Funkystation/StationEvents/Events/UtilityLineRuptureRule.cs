@@ -45,7 +45,7 @@ public sealed partial class UtilityLineRuptureRule : StationEventSystem<UtilityL
             // Announce 10 seconds before it happens (if you weren't paying attention you get round removed bye)
             var msg = Loc.GetString("utility-line-rupture-announcement", ("location", locationName));
 
-            var announcement = new Announcement(
+            var announcement = new ChatAnnouncement(
                 Message: msg,
                 Source: targetStation,
                 SenderName: Loc.GetString("utility-line-rupture-sender"),

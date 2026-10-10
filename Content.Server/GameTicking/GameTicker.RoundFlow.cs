@@ -799,7 +799,7 @@ namespace Content.Server.GameTicking
             var proto = _robustRandom.Pick(options);
 
             if (proto.Message != null)
-                _chatSystem.DispatchGlobalAnnouncement(new Announcement(Message: Loc.GetString(proto.Message), ShouldPlaySound: true));
+                _chatSystem.DispatchGlobalAnnouncement(new ChatAnnouncement(Message: Loc.GetString(proto.Message), ShouldPlaySound: true));
 
             // Macrocosm edit start - announcer overrides
             if (proto.Sound != null && _announcer.TryGetAnnouncerSound(proto.Sound.Value, out var sound))

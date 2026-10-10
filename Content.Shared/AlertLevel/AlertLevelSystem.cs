@@ -189,7 +189,7 @@ public sealed partial class AlertLevelSystem : EntitySystem
 
         if (announce)
         {
-            var announcement = new Announcement(
+            var announcement = new ChatAnnouncement(
                 Message: announcementFull,
                 SenderName: stationName,
                 ShouldPlaySound: playDefault,

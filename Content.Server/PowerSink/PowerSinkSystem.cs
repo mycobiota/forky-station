@@ -125,7 +125,7 @@ namespace Content.Server.PowerSink
             if (station == null)
                 return;
 
-            var announcement = new Announcement(
+            var announcement = new ChatAnnouncement(
                 Message: Loc.GetString("powersink-imminent-explosion-announcement"),
                 Source: station.Value,
                 SenderName: Loc.GetString("chat-manager-sender-sistr"),

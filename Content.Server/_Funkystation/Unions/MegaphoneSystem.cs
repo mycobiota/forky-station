@@ -97,7 +97,7 @@ public sealed partial class MegaphoneSystem : EntitySystem
         var author = $"{Name(args.Actor)} ({_unionSelector.GetUnionDisplayName(union)})";
         message += "\n" + Loc.GetString("comms-console-announcement-sent-by") + " " + author;
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message,
             Source: args.Actor,
             SenderName: union.Name);

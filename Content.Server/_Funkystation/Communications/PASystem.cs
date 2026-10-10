@@ -34,7 +34,7 @@ public sealed partial class PASystem : EntitySystem
     /// <param name="preamble">Whether the PA system should make a preamble "Incoming announcement" statement.</param>
     /// <param name="customPreamble">A custom string of text to display instead of the default preamble.</param>
     public void DispatchPAAnnouncement(
-        Announcement announce,
+        ChatAnnouncement announce,
         bool preamble = false,
         LocId? customPreamble = null,
         bool global = true,

@@ -184,7 +184,7 @@ public sealed partial class HijackBeaconSystem : EntitySystem
         var sender = Loc.GetString("hijack-beacon-announcement-sender");
         var message = Loc.GetString("hijack-beacon-announcement-activated", ("time", GetRemainingTime((ent.Owner, activeComp))));
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message,
             SenderName: sender,
             ShouldPlaySound: true,
@@ -215,7 +215,7 @@ public sealed partial class HijackBeaconSystem : EntitySystem
         var sender = Loc.GetString("hijack-beacon-announcement-sender");
         var message = Loc.GetString("hijack-beacon-announcement-deactivated");
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message,
             SenderName: sender,
             ShouldPlaySound: true,
@@ -270,7 +270,7 @@ public sealed partial class HijackBeaconSystem : EntitySystem
         var sender = Loc.GetString("hijack-beacon-announcement-sender");
         var message = Loc.GetString("hijack-beacon-announcement-success", ("fine", ev.Total));
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: message,
             SenderName: sender,
             ShouldPlaySound: true,

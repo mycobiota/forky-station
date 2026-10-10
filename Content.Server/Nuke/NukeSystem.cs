@@ -511,7 +511,7 @@ public sealed partial class NukeSystem : EntitySystem
             ("location", FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString((uid, nukeXform)))));
         var sender = Loc.GetString("nuke-component-announcement-sender");
 
-        var toDispatch = new Announcement(
+        var toDispatch = new ChatAnnouncement(
             Message: announcement,
             Source: stationUid ?? uid,
             SenderName: sender,
@@ -563,7 +563,7 @@ public sealed partial class NukeSystem : EntitySystem
         var announcement = Loc.GetString("nuke-component-announcement-unarmed");
         var sender = Loc.GetString("nuke-component-announcement-sender");
 
-        var toDispatch = new Announcement(
+        var toDispatch = new ChatAnnouncement(
             Message: announcement,
             Source: stationUid ?? uid,
             SenderName: sender,

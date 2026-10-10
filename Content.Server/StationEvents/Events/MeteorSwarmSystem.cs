@@ -71,7 +71,7 @@ public sealed partial class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmCompon
         if (canAnnounce && component.Announcement is { } locId) // funky
             // funky, sender/color pulled from the StationEvent component
         {
-            _chat.DispatchFilteredAnnouncement(new Announcement(
+            _chat.DispatchFilteredAnnouncement(new ChatAnnouncement(
                 Message: Loc.GetString(locId),
                 SenderName: Loc.GetString(Comp<StationEventComponent>(uid).StartAnnouncementSender),
                 ShouldPlaySound: paExclusive,

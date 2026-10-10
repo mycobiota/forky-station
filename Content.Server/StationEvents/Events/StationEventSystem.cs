@@ -84,7 +84,7 @@ public abstract partial class StationEventSystem<T> : GameRuleSystem<T> where T 
 
         if (canAnnounce && stationEvent.StartAnnouncement != null)
         {
-            var announcement = new Announcement(
+            var announcement = new ChatAnnouncement(
                 Message: Loc.GetString(stationEvent.StartAnnouncement),
                 SenderName: Loc.GetString(stationEvent.StartAnnouncementSender),
                 ShouldPlaySound: shouldNotPlayGlobal,
@@ -159,7 +159,7 @@ public abstract partial class StationEventSystem<T> : GameRuleSystem<T> where T 
 
         if (canAnnounce && stationEvent.EndAnnouncement != null) // funky
         {
-            var announcement = new Announcement(
+            var announcement = new ChatAnnouncement(
                 Message: Loc.GetString(stationEvent.EndAnnouncement),
                 SenderName: Loc.GetString(stationEvent.EndAnnouncementSender),
                 ShouldPlaySound: shouldNotPlayGlobal,

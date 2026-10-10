@@ -82,7 +82,7 @@ namespace Content.Server.Nuke
             if (wasSent)
             {
                 var msg = Loc.GetString("nuke-component-announcement-send-codes");
-                _chatSystem.DispatchStationAnnouncement(new Announcement(
+                _chatSystem.DispatchStationAnnouncement(new ChatAnnouncement(
                     Message: msg,
                     Source: station,
                     ColorOverride: Color.Red),

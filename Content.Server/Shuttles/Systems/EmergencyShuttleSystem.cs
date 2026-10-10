@@ -344,7 +344,7 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
             // funky - getting this earlier so it can be passed into the announcement
             _announcer.TryGetAnnouncerSound(stationShuttleComp.FailureAudio, out var sound);
 
-            _chatSystem.DispatchStationAnnouncement(new Announcement(
+            _chatSystem.DispatchStationAnnouncement(new ChatAnnouncement(
                 Message: Loc.GetString(stationShuttleComp.FailureAnnouncement),
                 Source: result.Station,
                 SenderName: Loc.GetString("chat-manager-sender-sistr"),
@@ -391,7 +391,7 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
         _announcer.TryGetAnnouncerSound(audioId, out var audio);
 
 
-        _chatSystem.DispatchStationAnnouncement(new Announcement(
+        _chatSystem.DispatchStationAnnouncement(new ChatAnnouncement(
             Message: Loc.GetString(
                 locKey,
                 ("time", $"{_consoleAccumulator:0}"),

@@ -249,7 +249,7 @@ namespace Content.Server.Communications
 
             _announcer.TryGetAnnouncerSound(comp.Sound, out var sound);
 
-            var announcement = new Announcement(
+            var announcement = new ChatAnnouncement(
                 Message: msg,
                 SenderName: title,
                 AltAnnouncementSound: sound,

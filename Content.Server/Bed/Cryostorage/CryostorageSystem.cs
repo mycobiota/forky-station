@@ -233,7 +233,7 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
             _stationRecords.RemoveRecord(key, stationRecords);
         }
 
-        var announcement = new Announcement(
+        var announcement = new ChatAnnouncement(
             Message: Loc.GetString(
                 "earlyleave-cryo-announcement",
                 ("character", name),
