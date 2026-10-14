@@ -1,4 +1,4 @@
-// Carpmosia-rework - Better visual descriptions
+// Funky - Carpmosia-rework - Better flavor text
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Robust.Shared.Utility;
@@ -7,14 +7,8 @@ namespace Content.Shared.DetailExaminable;
 
 public sealed partial class DetailExaminableSystem : EntitySystem
 {
-    [Dependency] private ExamineSystemShared _examine = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<DetailExaminableComponent, ExaminedEvent>(OnExamined);
-    }
-
+    // Funky - carpmosia edit - bake flavor text into the examine popup rather than using a separate button for it
+    [SubscribeLocalEvent]
     private void OnExamined(Entity<DetailExaminableComponent> ent, ref ExaminedEvent args)
     {
         if (Identity.Name(args.Examined, EntityManager) != MetaData(args.Examined).EntityName)
