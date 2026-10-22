@@ -11,6 +11,7 @@ using Robust.Shared.Utility;
 namespace Content.Server.Chat.Systems;
 
 // todo: test it actually works lol
+// todo: write an integration test
 
 public sealed partial class ChatSystem
 {
