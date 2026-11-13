@@ -7,10 +7,10 @@ namespace Content.Server.Database._Funkystation;
 
 internal static class ModelNewsEntry
 {
-    public static void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<NewsEntry>();
-    }
+    // arbitrary number for now but we will need to decide on a max length i think
+    internal const int MaxNewsEntryLength = 16384;
+
+    internal const int EntryBriefLength = 100;
 }
 
 public class NewsEntry
@@ -18,20 +18,10 @@ public class NewsEntry
     [Required, Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Required] public string Message { get; set; } = string.Empty;
+    [Required, MaxLength(ModelNewsEntry.MaxNewsEntryLength)] public string Message { get; set; } = string.Empty;
 
-    [ForeignKey("CreatedBy")] public Guid? CreatedById { get; set; }
-    public Player? CreatedBy { get; set; }
+    [Required, MaxLength(ModelNewsEntry.EntryBriefLength)]
+    public string MessageBrief { get; set; } = string.Empty;
 
     [Required] public DateTime CreatedAt { get; set; }
-
-    [ForeignKey("LastEditedBy")] public Guid? LastEditedById { get; set; }
-    public Player? LastEditedBy { get; set; }
-
-    public DateTime? LastEditedAt { get; set; }
-
-    public bool Deleted { get; set; }
-    [ForeignKey("DeletedBy")] public Guid? DeletedById { get; set; }
-    public Player? DeletedBy { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }

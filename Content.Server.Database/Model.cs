@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
+using Content.Server.Database._Funkystation;
 using Content.Shared.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,9 @@ namespace Content.Server.Database
         public DbSet<IPIntelCache> IPIntelCache { get; set; } = null!;
         public DbSet<CustomVoteLog> CustomVoteLog { get; set; } = null!;
         public DbSet<CustomVoteLogOption> CustomVoteLogOption { get; set; } = null!;
+
+        // funky station
+        public DbSet<NewsEntry> NewsEntry { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
