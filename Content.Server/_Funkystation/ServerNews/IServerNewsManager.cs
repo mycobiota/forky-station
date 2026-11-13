@@ -8,7 +8,7 @@ namespace Content.Server._Funkystation.ServerNews;
 // specifically "ServerNews" to distinguish from the news published by reporters in-game
 public interface IServerNewsManager
 {
-    event Action? NewsPublished;
+    event Action<int>? NewsPublished;
     event Action? NewsEdited;
     event Action? NewsDeleted;
 
@@ -18,7 +18,15 @@ public interface IServerNewsManager
 
     Task OpenEui(ICommonSession player);
     Task OpenEditorEui(ICommonSession admin);
-    Task PublishServerNews(ICommonSession author, string message);
+    Task<int> PublishServerNews(ICommonSession author, string message);
     Task DeleteServerNews(int newsId, ICommonSession deletedBy);
     Task EditServerNews(int newsId, ICommonSession editedBy, string message);
+
+    Task<List<ServerNewsRecord>> GetServerNews();
 }
+// todo: we need a lot more information about the server news entry (author, deletion, editors, etc)
+public record ServerNewsRecord(
+    int Id,
+    string Message,
+    string MessageBrief,
+    DateTime CreatedAt);

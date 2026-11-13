@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Content.Server._Funkystation.ServerNews;
 using Content.Server.Database._Funkystation;
 
 namespace Content.Server.Database;
@@ -16,5 +17,11 @@ public sealed partial class ServerDbManager
         };
 
         return RunDbCommand(() => _db.AddNewsEntry(news));
+    }
+
+    public Task<List<ServerNewsRecord>> GetServerNews()
+    {
+        DbReadOpsMetric.Inc();
+        return RunDbCommand(() => _db.GetServerNews());
     }
 }

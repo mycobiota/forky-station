@@ -24,7 +24,7 @@ public sealed partial class ServerNewsManager : IServerNewsManager
     [Dependency] private ILocalizationManager _loc = default!;
     [Dependency] private IChatManager _chat = default!;
 
-    public event Action? NewsPublished;
+    public event Action<int>? NewsPublished;
     public event Action? NewsEdited;
     public event Action? NewsDeleted;
 
@@ -53,9 +53,11 @@ public sealed partial class ServerNewsManager : IServerNewsManager
         throw new NotImplementedException();
     }
 
-    public async Task PublishServerNews(ICommonSession author, string message)
+    public async Task<int> PublishServerNews(ICommonSession author, string message)
     {
-        await _db.AddNewsEntry(message, message[..100], DateTime.UtcNow);
+        var newsId = await _db.AddNewsEntry(message, message[..100], DateTime.UtcNow);
+        NewsPublished?.Invoke(newsId);
+        return newsId;
     }
 
     public Task EditServerNews(int newsId, ICommonSession editedBy, string message)
@@ -66,5 +68,11 @@ public sealed partial class ServerNewsManager : IServerNewsManager
     public Task DeleteServerNews(int newsId, ICommonSession deletedBy)
     {
         throw new NotImplementedException();
+    }
+
+    // todo: get only the most recent no. of entries / a certain range of entries (pages and stuff)
+    public async Task<List<ServerNewsRecord>> GetServerNews()
+    {
+        return await _db.GetServerNews();
     }
 }
