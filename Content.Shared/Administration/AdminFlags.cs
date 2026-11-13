@@ -125,6 +125,11 @@ namespace Content.Shared.Administration
         NameColor = 1 << 21,
 
         /// <summary>
+        ///     Funky - Lets you publish / edit / delete server news.
+        /// </summary>
+        ServerNews = 1 << 29,
+
+        /// <summary>
         ///     Lets you use the mentor help system.
         /// </summary>
         MentorHelp = 1 << 30,

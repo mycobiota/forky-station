@@ -26,7 +26,8 @@ using MSLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Content.Server.Database
 {
-    public interface IServerDbManager
+    // funky - making partial for my sanity
+    public partial interface IServerDbManager
     {
         void Init();
 
