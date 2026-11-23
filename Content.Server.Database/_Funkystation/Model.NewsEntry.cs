@@ -18,7 +18,8 @@ public class NewsEntry
     [Required, Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Required, MaxLength(ModelNewsEntry.MaxNewsEntryLength)] public string Message { get; set; } = string.Empty;
+    [Required, MaxLength(ModelNewsEntry.MaxNewsEntryLength)]
+    public string Message { get; set; } = string.Empty;
 
     [Required, MaxLength(ModelNewsEntry.EntryBriefLength)]
     public string MessageBrief { get; set; } = string.Empty;

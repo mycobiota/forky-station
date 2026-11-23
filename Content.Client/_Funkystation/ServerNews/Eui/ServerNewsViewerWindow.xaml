@@ -1,0 +1,12 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    Title="{Loc 'news-write-ui-default-title'}"
+    MinSize="600 400"
+    SetSize="600 400"> <!-- todo: locstrings -->
+    <BoxContainer Name="NewsList">
+
+    </BoxContainer>
+
+
+</controls:FancyWindow>
