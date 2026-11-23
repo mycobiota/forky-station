@@ -1,3 +1,4 @@
+using Content.Server._Funkystation.ServerNews;
 using Content.Server._RMC14.Mentor;
 using Content.Server._MACRO.Announcements;
 using Content.Server.Administration;
@@ -89,5 +90,6 @@ internal static class ServerContentIoC
         deps.Register<MentorManager>(); // Funky Mentor Help
         deps.Register<AnnouncerManager>(); // Macrocosm edit
         deps.Register<WhitelistManager>();
+        deps.Register<IServerNewsManager, ServerNewsManager>(); // funky
     }
 }

@@ -12,38 +12,31 @@ using Robust.Shared.Player;
 
 namespace Content.Server._Funkystation.ServerNews;
 
-public sealed partial class ServerNewsManager : IServerNewsManager
+public sealed partial class ServerNewsManager : IServerNewsManager, IPostInjectInit
 {
-    [Dependency] private IAdminManager _admins = default!;
-    [Dependency] private IServerDbManager _db = default!;
-    [Dependency] private ILogManager _logManager = default!;
-    [Dependency] private EuiManager _euis = default!;
-    [Dependency] private IEntitySystemManager _systems = default!;
-    [Dependency] private IConfigurationManager _config = default!;
-    [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private ILocalizationManager _loc = default!;
-    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IAdminManager _admins = null!;
+    [Dependency] private IServerDbManager _db = null!;
+    [Dependency] private ILogManager _logManager = null!;
+    [Dependency] private EuiManager _euis = null!;
+    [Dependency] private IEntitySystemManager _systems = null!;
+    [Dependency] private IConfigurationManager _config = null!;
+    [Dependency] private IPlayerManager _player = null!;
+    [Dependency] private ILocalizationManager _loc = null!;
+    [Dependency] private IChatManager _chat = null!;
+
+    private ISawmill _sawmill = null!;
+    private const string SawmillId = "server_news_manager";
 
     public event Action<int>? NewsPublished;
     public event Action? NewsEdited;
     public event Action? NewsDeleted;
 
-    public bool CanCreate(ICommonSession admin)
+    public bool CanPublish(ICommonSession? admin)
     {
-        return CanEdit(admin);
+        return admin != null && _admins.HasAdminFlag(admin, AdminFlags.ServerNews);
     }
 
-    public bool CanDelete(ICommonSession admin)
-    {
-        return CanEdit(admin);
-    }
-
-    public bool CanEdit(ICommonSession admin)
-    {
-        return _admins.HasAdminFlag(admin, AdminFlags.ServerNews);
-    }
-
-    public Task OpenEui(ICommonSession player)
+    public Task OpenViewerEui(ICommonSession player)
     {
         throw new NotImplementedException();
     }
@@ -53,9 +46,16 @@ public sealed partial class ServerNewsManager : IServerNewsManager
         throw new NotImplementedException();
     }
 
-    public async Task<int> PublishServerNews(ICommonSession author, string message)
+    public async Task<int?> PublishServerNews(ICommonSession author, string message)
     {
-        var newsId = await _db.AddNewsEntry(message, message[..100], DateTime.UtcNow);
+        if (!CanPublish(author))
+        {
+            _sawmill.Warning($"Author {author.Name} tried to publish server news without the required permission to.");
+            return null;
+        }
+
+        var messageBrief = message.Length > 100 ? message[..100] : message;
+        var newsId = await _db.AddNewsEntry(message, messageBrief, DateTime.UtcNow);
         NewsPublished?.Invoke(newsId);
         return newsId;
     }
@@ -74,5 +74,10 @@ public sealed partial class ServerNewsManager : IServerNewsManager
     public async Task<List<ServerNewsRecord>> GetServerNews()
     {
         return await _db.GetServerNews();
+    }
+
+    public void PostInject()
+    {
+        _sawmill = _logManager.GetSawmill(SawmillId);
     }
 }

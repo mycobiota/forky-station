@@ -12,13 +12,11 @@ public interface IServerNewsManager
     event Action? NewsEdited;
     event Action? NewsDeleted;
 
-    bool CanCreate(ICommonSession admin);
-    bool CanDelete(ICommonSession admin);
-    bool CanEdit(ICommonSession admin);
+    bool CanPublish(ICommonSession? admin);
 
-    Task OpenEui(ICommonSession player);
+    Task OpenViewerEui(ICommonSession player);
     Task OpenEditorEui(ICommonSession admin);
-    Task<int> PublishServerNews(ICommonSession author, string message);
+    Task<int?> PublishServerNews(ICommonSession author, string message);
     Task DeleteServerNews(int newsId, ICommonSession deletedBy);
     Task EditServerNews(int newsId, ICommonSession editedBy, string message);
 
