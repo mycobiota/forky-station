@@ -19,13 +19,16 @@ public abstract partial class ServerDbBase
     public virtual async Task<List<ServerNewsRecord>> GetServerNews()
     {
         await using var db = await GetDb();
-        return db.DbContext.NewsEntry.Select(MakeServerNewsRecord).ToList();
+        return db.DbContext.NewsEntry.Include(n => n.CreatedBy)
+            .Select(MakeServerNewsRecord)
+            .ToList();
     }
 
-    private static ServerNewsRecord MakeServerNewsRecord(NewsEntry newsEntry)
+    private ServerNewsRecord MakeServerNewsRecord(NewsEntry newsEntry)
     {
         return new ServerNewsRecord(
             Id: newsEntry.Id,
+            CreatedBy: MakePlayerRecord(newsEntry.CreatedBy),
             Message: newsEntry.Message,
             MessageBrief: newsEntry.MessageBrief,
             CreatedAt: newsEntry.CreatedAt

@@ -5,6 +5,6 @@ namespace Content.Server.Database;
 
 public partial interface IServerDbManager
 {
-    Task<int> AddNewsEntry(string message, string messageBrief, DateTimeOffset createdAt);
+    Task<int> AddNewsEntry(string message, string messageBrief, Guid createdBy, DateTimeOffset createdAt);
     Task<List<ServerNewsRecord>> GetServerNews();
 }

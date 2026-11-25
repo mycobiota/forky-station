@@ -6,13 +6,14 @@ namespace Content.Server.Database;
 
 public sealed partial class ServerDbManager
 {
-    public Task<int> AddNewsEntry(string message, string messageBrief, DateTimeOffset createdAt)
+    public Task<int> AddNewsEntry(string message, string messageBrief, Guid createdBy, DateTimeOffset createdAt)
     {
         DbWriteOpsMetric.Inc();
         var news = new NewsEntry
         {
             Message = message,
             MessageBrief = messageBrief,
+            CreatedById = createdBy,
             CreatedAt = createdAt.UtcDateTime,
         };
 

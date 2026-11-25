@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Content.Server.Database;
 using Robust.Shared.Player;
 
 namespace Content.Server._Funkystation.ServerNews;
@@ -25,6 +26,7 @@ public interface IServerNewsManager
 // todo: we need a lot more information about the server news entry (author, deletion, editors, etc)
 public record ServerNewsRecord(
     int Id,
+    PlayerRecord? CreatedBy,
     string Message,
     string MessageBrief,
     DateTime CreatedAt);

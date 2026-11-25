@@ -33,7 +33,9 @@ public sealed partial class GetNewsCommand : ToolshedCommand
 
         foreach (var entry in news)
         {
-            ctx.WriteLine($"entry id: {entry.Id}, brief: {entry.MessageBrief}, datetime: {entry.CreatedAt}");
+            if (entry.CreatedBy is null)
+                ctx.WriteLine("no author for this entry");
+            ctx.WriteLine($"entry id: {entry.Id}, author: {entry.CreatedBy} brief: {entry.MessageBrief}, datetime: {entry.CreatedAt}");
         }
     }
 }

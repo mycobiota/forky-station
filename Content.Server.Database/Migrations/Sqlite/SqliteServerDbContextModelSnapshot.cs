@@ -1428,11 +1428,15 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("news_entry_id");
+                        .HasColumnName("server_news_entries_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT")
                         .HasColumnName("created_at");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("created_by_id");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -1446,10 +1450,19 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("message_brief");
 
-                    b.HasKey("Id")
-                        .HasName("PK_news_entry");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("title");
 
-                    b.ToTable("news_entry", (string)null);
+                    b.HasKey("Id")
+                        .HasName("PK_server_news_entries");
+
+                    b.HasIndex("CreatedById")
+                        .HasDatabaseName("IX_server_news_entries_created_by_id");
+
+                    b.ToTable("server_news_entries", (string)null);
                 });
 
             modelBuilder.Entity("PlayerRound", b =>
@@ -2041,6 +2054,18 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Ban");
                 });
 
+            modelBuilder.Entity("Content.Server.Database._Funkystation.NewsEntry", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "CreatedBy")
+                        .WithMany("ServerNewsPublished")
+                        .HasForeignKey("CreatedById")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_server_news_entries_player_created_by_id");
+
+                    b.Navigation("CreatedBy");
+                });
+
             modelBuilder.Entity("PlayerRound", b =>
                 {
                     b.HasOne("Content.Server.Database.Player", null)
@@ -2135,6 +2160,8 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("AdminWatchlistsReceived");
 
                     b.Navigation("JobWhitelists");
+
+                    b.Navigation("ServerNewsPublished");
                 });
 
             modelBuilder.Entity("Content.Server.Database.Preference", b =>

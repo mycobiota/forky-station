@@ -55,7 +55,7 @@ public sealed partial class ServerNewsManager : IServerNewsManager, IPostInjectI
         }
 
         var messageBrief = message.Length > 100 ? message[..100] : message;
-        var newsId = await _db.AddNewsEntry(message, messageBrief, DateTime.UtcNow);
+        var newsId = await _db.AddNewsEntry(message, messageBrief, author.UserId, DateTime.UtcNow);
         NewsPublished?.Invoke(newsId);
         return newsId;
     }
