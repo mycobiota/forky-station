@@ -65,9 +65,15 @@ public sealed partial class ServerNewsManager : IServerNewsManager, IPostInjectI
         throw new NotImplementedException();
     }
 
-    public Task DeleteServerNews(int newsId, ICommonSession deletedBy)
+    public async Task DeleteServerNews(int newsId, ICommonSession deletedBy)
     {
-        throw new NotImplementedException();
+        if (!CanPublish(deletedBy))
+        {
+            _sawmill.Warning($"Author {deletedBy.Name} tried to delete server news without the required permission to.");
+            return;
+        }
+
+        await _db.DeleteNewsEntry(newsId);
     }
 
     // todo: get only the most recent no. of entries / a certain range of entries (pages and stuff)

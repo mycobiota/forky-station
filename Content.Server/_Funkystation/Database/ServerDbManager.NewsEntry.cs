@@ -20,6 +20,12 @@ public sealed partial class ServerDbManager
         return RunDbCommand(() => _db.AddNewsEntry(news));
     }
 
+    public Task DeleteNewsEntry(int newsId)
+    {
+        DbWriteOpsMetric.Inc();
+        return RunDbCommand(() => _db.DeleteNewsEntry(newsId));
+    }
+
     public Task<List<ServerNewsRecord>> GetServerNews()
     {
         DbReadOpsMetric.Inc();

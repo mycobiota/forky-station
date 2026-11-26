@@ -16,6 +16,15 @@ public abstract partial class ServerDbBase
         return newsEntry.Id;
     }
 
+    public virtual async Task DeleteNewsEntry(int newsId)
+    {
+        await using var db = await GetDb();
+        var entry = await db.DbContext.NewsEntry.SingleAsync(n => n.Id == newsId);
+        db.DbContext.NewsEntry.Remove(entry);
+
+        await db.DbContext.SaveChangesAsync();
+    }
+
     public virtual async Task<List<ServerNewsRecord>> GetServerNews()
     {
         await using var db = await GetDb();
